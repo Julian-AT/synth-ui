@@ -212,7 +212,6 @@ export async function getMissingKeys() {
   const keysRequired = [
     "OPENAI_API_KEY",
     "CLERK_SECRET_KEY",
-    "CLERK_PUBLISHABLE_KEY",
     "KV_URL",
     "KV_REST_API_URL",
     "KV_REST_API_TOKEN",
