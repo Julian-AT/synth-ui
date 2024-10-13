@@ -209,7 +209,15 @@ export async function refreshHistory(path: string) {
 }
 
 export async function getMissingKeys() {
-  const keysRequired = ["OPENAI_API_KEY"];
+  const keysRequired = [
+    "OPENAI_API_KEY",
+    "CLERK_SECRET_KEY",
+    "CLERK_PUBLISHABLE_KEY",
+    "KV_URL",
+    "KV_REST_API_URL",
+    "KV_REST_API_TOKEN",
+    "KV_REST_API_READ_ONLY_TOKEN",
+  ];
   return keysRequired
     .map((key) => (process.env[key] ? "" : key))
     .filter((key) => key !== "");
