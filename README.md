@@ -7,15 +7,15 @@
 <p align="center"><a href="https://www.synthui.design/">✨ Homepage</a> | <a href="https://www.synthui.design/chat">🤖 Chat with Synth UI</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-2k-v1">🚀 Synth UI v1 Model</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-2k-v1">🤗 Completion Dataset</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-Instruct-2k-v1">🤗 Instruct Dataset</a></p>
 </div>
 
-> [!TIP]
-> For all information regarding creation of the datasets, training of the model and how to use the model for your own projects, please refer to the [Dataset & Model Monorepo](https://github.com/Julian-AT/synth-ui-training).
-
 # Synth UI
 
 An open source application to generate UI code with natural language.
 
 > [!IMPORTANT]
 > Synth UI is an open source approach to [verce's v0](https://v0.dev/). Synth UI is not affiliated with vercel or their v0 product.
+
+> [!TIP]
+> For all information regarding creation of the datasets, training of the model and how to use the model for your own projects, please refer to the [Dataset & Model Monorepo](https://github.com/Julian-AT/synth-ui-training).
 
 # About this project
 
