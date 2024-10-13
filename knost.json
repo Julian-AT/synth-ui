@@ -1,0 +1,67 @@
+{
+	"componentName": "PricingSection",
+	"fileName": "pricing-section.tsx",
+	"props": [
+		{
+			"name": "title",
+			"type": "string",
+			"required": true,
+			"description": "The title of the pricing section."
+		},
+		{
+			"name": "description",
+			"type": "string",
+			"required": false,
+			"description": "A brief description of the pricing section."
+		},
+		{
+			"name": "plans",
+			"type": "ReactNode",
+			"required": true,
+			"description": "A list of pricing plans to be displayed."
+		}
+	],
+	"uiLibraryImports": {
+		"imports": [
+			{
+				"name": "Card",
+				"reason": "To display each pricing plan in a structured and visually appealing manner."
+			},
+			{
+				"name": "Button",
+				"reason": "To allow users to select or purchase a pricing plan."
+			},
+			{
+				"name": "Typography",
+				"reason": "For displaying text elements like title and description with consistent styling."
+			}
+		]
+	},
+	"iconLibraryImports": {
+		"imports": [
+			{
+				"name": "CheckCircleIcon",
+				"reason": "To indicate features included in each pricing plan."
+			},
+			{
+				"name": "CloseCircleIcon",
+				"reason": "To indicate features not included in each pricing plan."
+			}
+		]
+	},
+	"acceptsChildren": false,
+	"states": [
+		{
+			"name": "selectedPlan",
+			"type": "string",
+			"description": "Tracks the currently selected pricing plan.",
+			"initialValue": ""
+		}
+	],
+	"accessibility": {
+		"ariaLabel": "Pricing Section",
+		"role": "region",
+		"ariaDescribedBy": "pricing-description",
+		"keyboardNavigation": true
+	}
+}
