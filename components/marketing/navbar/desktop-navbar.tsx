@@ -108,7 +108,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
           </Button>
         </SignedIn>
         <SignedOut>
-          <Button as={Link} href="/sign-in">
+          <Button as={Link} href="/chat">
             Login
           </Button>
         </SignedOut>

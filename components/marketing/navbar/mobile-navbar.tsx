@@ -99,7 +99,7 @@ export const MobileNavbar = ({ navItems }: any) => {
               </Button>
             </SignedIn>
             <SignedOut>
-              <Button as={Link} href="/sign-in">
+              <Button as={Link} href="/chat">
                 Login
               </Button>
             </SignedOut>
