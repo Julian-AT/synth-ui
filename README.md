@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="Synth UI - Open Source Generative UI with natural language" src="public/assets/videos/synth_ui_clip1.gif" width="75%">
+<img alt="Synth UI - Open Source Generative UI with natural language" src="public/assets/videos/synth_ui_clip1.gif" width="100%">
 <h3>Synth UI</h3>
 <p>
     Open Source Generative UI with natural language
