@@ -14,14 +14,18 @@ export type AIMessageType =
   | "component_specification"
   | "component_card"
   | "component_iteration"
+  | "answer"
   | "skip"
   | "input"
   | "inquiry"
   | "tool"
+  | "follow_up"
   | "end";
 
-export type AIMessage = CoreMessage & {
+export type AIMessage = Omit<CoreMessage, "content"> & {
   id: string;
+  content: string;
+  type: AIMessageType;
 };
 
 export type ExamplePrompt = {
