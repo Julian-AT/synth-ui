@@ -31,23 +31,30 @@ export default function ChatRenameDialog({
     return null;
   }
 
-  const { id } = chat;
+  const { id, title } = chat;
 
   const handleSubmit = async () => {
     setIsLoading(true);
+
+    // optimistically update the title
+    setChatName(name);
+    console.log(chat.title);
+
     const res = await renameChat(id, name);
     if (!res || !res.success || "error" in res) {
       setError(res.error || "An error occurred while renaming the chat");
+      setChatName(title);
+      setHasChanged(false);
+    } else {
+      setError(null);
+      setHasChanged(true);
     }
 
-    setError(null);
-    setHasChanged(true);
     setIsLoading(false);
-    setChatName(name);
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(o) => !o && setName(title)}>
       <DialogTrigger>{children}</DialogTrigger>
       <DialogContent>
         <DialogTitle>Rename Chat</DialogTitle>
@@ -55,6 +62,7 @@ export default function ChatRenameDialog({
         <Input
           onChange={(e) => setName(e.target.value)}
           placeholder="Chat Name"
+          value={name}
         />
         {error && (
           <DialogFooter>
