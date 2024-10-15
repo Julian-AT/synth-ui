@@ -14,7 +14,7 @@ export const Footer = () => {
     },
     {
       name: "Source Code",
-      href: "process.env.NEXT_PUBLIC_GITHUB_URL",
+      href: process.env.NEXT_PUBLIC_GITHUB_URL!,
     },
   ];
 

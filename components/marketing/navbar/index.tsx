@@ -15,7 +15,7 @@ const navItems: NavItem[] = [
   },
   {
     icon: <Blockchain01Icon className="h-4 w-4" />,
-    link: "process.env.NEXT_PUBLIC_GITHUB_URL",
+    link: process.env.NEXT_PUBLIC_GITHUB_URL!,
     title: "Synthui.v1 Model",
     target: "_blank",
   },

@@ -57,7 +57,7 @@ export default async function UserPanel() {
           <span className="text-center text-sm">
             Synth UI is an
             <Link
-              href="process.env.NEXT_PUBLIC_GITHUB_URL"
+              href={process.env.NEXT_PUBLIC_GITHUB_URL!}
               className={cn(
                 buttonVariants({ variant: "link" }),
                 "h-fit px-1 py-0",

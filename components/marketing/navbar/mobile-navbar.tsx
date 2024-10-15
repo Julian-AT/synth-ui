@@ -105,7 +105,7 @@ export const MobileNavbar = ({ navItems }: any) => {
             </SignedOut>
             <Button
               as={Link}
-              href="process.env.NEXT_PUBLIC_GITHUB_URL"
+              href={process.env.NEXT_PUBLIC_GITHUB_URL!}
               variant="simple"
               className="flex items-center gap-1.5"
             >

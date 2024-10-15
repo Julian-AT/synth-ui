@@ -74,7 +74,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
         </div>
         <div className="flex items-center gap-1">
           {navItems.map((item, index) => (
-            <>
+            <div key={index} className="flex items-center gap-1.5">
               <NavBarItem
                 href={item.link}
                 key={item.title}
@@ -87,7 +87,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
               {index !== navItems.length - 1 && (
                 <Separator orientation="vertical" className="h-4" />
               )}
-            </>
+            </div>
           ))}
         </div>
       </div>
@@ -95,7 +95,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
         <ModeToggle />
         <Button
           as={Link}
-          href="process.env.NEXT_PUBLIC_GITHUB_URL"
+          href={process.env.NEXT_PUBLIC_GITHUB_URL!}
           variant="simple"
           className="flex items-center gap-1.5"
         >

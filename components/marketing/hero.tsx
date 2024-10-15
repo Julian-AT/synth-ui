@@ -35,7 +35,7 @@ export const Hero = () => {
         }}
         className="flex justify-center"
       >
-        <Link href="process.env.NEXT_PUBLIC_GITHUB_URL">
+        <Link href={process.env.NEXT_PUBLIC_GITHUB_URL!}>
           <Badge>
             <div className="flex items-center gap-1.5">
               <GithubIcon className="h-4 w-4" />
@@ -104,7 +104,7 @@ export const Hero = () => {
         <Button
           variant="simple"
           as={Link}
-          href="process.env.NEXT_PUBLIC_GITHUB_URL"
+          href={process.env.NEXT_PUBLIC_GITHUB_URL!}
           className="group flex items-center space-x-1"
         >
           <span>Source Code</span>

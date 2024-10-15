@@ -32,7 +32,7 @@ export default function NotImplementedDialog({
               buttonVariants({ variant: "default" }),
               "flex gap-1.5",
             )}
-            href="process.env.NEXT_PUBLIC_GITHUB_URL"
+            href={process.env.NEXT_PUBLIC_GITHUB_URL!}
           >
             <GithubIcon className="h-5 w-5" />
             <span>GitHub</span>
