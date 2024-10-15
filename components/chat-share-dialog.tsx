@@ -72,7 +72,7 @@ export function ChatShareDialog({ children }: { children: React.ReactNode }) {
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger className="flex items-center">{children}</DialogTrigger>
       <DialogContent>
         <DialogTitle>Share Chat</DialogTitle>
         <DialogDescription>
