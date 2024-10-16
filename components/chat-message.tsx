@@ -19,8 +19,11 @@ export function MarkdownBlock({ content }: { content: string }) {
         className="prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words"
         remarkPlugins={[remarkGfm, remarkMath]}
         components={{
+          b({ children }) {
+            return <b className="px-1 font-bold">{children}</b>;
+          },
           p({ children }) {
-            return <p className="mb-3 last:mb-0">{children}</p>;
+            return <p className="mb-3 leading-relaxed last:mb-0">{children}</p>;
           },
           h1({ children }) {
             return <h1 className="mb-3 text-2xl font-semibold">{children}</h1>;
