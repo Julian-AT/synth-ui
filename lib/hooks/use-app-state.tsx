@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { Chat } from "@/lib/types";
-import { renameChat } from "../actions/chat";
+import { renameChat } from "@/lib/actions/chat";
 import { toast } from "sonner";
 
 const LOCAL_STORAGE_KEY = "app-state";
