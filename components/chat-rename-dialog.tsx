@@ -55,7 +55,9 @@ export default function ChatRenameDialog({
 
   return (
     <Dialog onOpenChange={(o) => !o && setName(title)}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger className="max-w-[250px] overflow-hidden text-ellipsis md:max-w-[300px]">
+        {children}
+      </DialogTrigger>
       <DialogContent>
         <DialogTitle>Rename Chat</DialogTitle>
         <DialogDescription></DialogDescription>
