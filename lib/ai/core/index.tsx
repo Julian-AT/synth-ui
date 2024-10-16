@@ -69,21 +69,9 @@ async function submitUserMessage(
 
   messages.splice(0, Math.max(messages.length - 10, 0));
 
-  const groupId = generateId();
-
-  const userInput = skip
+  const content = skip
     ? `{ "action": "skip" }`
     : (formData?.get("input") as string);
-
-  const content = skip
-    ? userInput
-    : formData
-      ? JSON.stringify(
-          Object.fromEntries(formData)
-            ["input"].toString()
-            .replace(/^\"|\"$/, ""),
-        )
-      : null;
 
   if (content) {
     aiState.update({
@@ -191,7 +179,7 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
   const messages = Array.isArray(aiState.messages) ? aiState.messages : [];
 
   return messages
-    .map((message, index) => {
+    .map((message) => {
       const { role, content, id, type } = message;
 
       if (type === "end" || type === "component_specification") return null;
