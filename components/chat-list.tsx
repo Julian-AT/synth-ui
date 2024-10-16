@@ -12,7 +12,7 @@ export function ChatList({ messages }: ChatList) {
   }
 
   return (
-    <div className="relative mx-auto max-w-3xl px-4">
+    <div className="relative mx-auto mb-12 max-h-full max-w-3xl px-4">
       {messages
         .filter((m) => m.display !== undefined)
         .map((message, index) => (
