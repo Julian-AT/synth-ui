@@ -36,7 +36,5 @@ export async function generateTitle(query: string): Promise<string> {
     }
   });
 
-  console.log("Title:", title);
-
   return title;
 }
