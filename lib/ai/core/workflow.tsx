@@ -41,10 +41,14 @@ export async function workflow(
       };
     } = { object: { next: "generate_component" } };
 
-    if (!skip) action = (await taskManager(aiState.get().messages)) ?? action;
+    if (!skip) action = (await taskManager(messages)) ?? action;
 
     if (action.object.next === "inquire") {
-      const inquiry = await inquire(uiStream, aiState.get().messages);
+      const inquiry = await inquire(uiStream, messages);
+
+      if (inquiry.hasError) {
+        throw new Error("An error occured while generating the component.");
+      }
 
       uiStream.done();
       aiState.done({
@@ -64,24 +68,20 @@ export async function workflow(
     }
 
     if (action.object.next === "generate_component") {
-      const abstract = await componentAbstract(
-        uiStream,
-        aiState.get().messages,
-        true,
-      );
+      const abstract = await componentAbstract(uiStream, messages, true);
 
       uiStream.append(<ComponentCardSkeleton />);
 
-      const specification = await componentSpecification(
-        aiState.get().messages,
-      );
+      const specification = await componentSpecification(messages);
 
       const fileName = specification.fileName;
       const title = camelCaseToSpaces(specification.componentName);
       const component = await componentGenerator(uiStream, specification, id);
 
       if (component.hasError) {
-        throw new Error("An error occured while generating the component.");
+        throw new Error(
+          "An error occured while generating the component. Please try again later!",
+        );
       }
 
       const summary = await componentSummarizer(uiStream, component.response);
@@ -96,12 +96,12 @@ export async function workflow(
             role: "assistant",
             type: "answer",
           },
-          {
-            id,
-            content: JSON.stringify(specification),
-            role: "tool",
-            type: "component_specification",
-          },
+          //   {
+          //     id,
+          //     content: JSON.stringify(specification),
+          //     role: "tool",
+          //     type: "component_specification",
+          //   },
           {
             id,
             role: "tool",
