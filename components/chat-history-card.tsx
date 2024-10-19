@@ -13,7 +13,7 @@ export default function ChatHistoryCard({
   createdAt,
   sharePath,
   path,
-}: Chat) {
+}: Chat & { description: string }) {
   return (
     <Link href={path}>
       <Card className="flex flex-col gap-2 p-4">
@@ -25,7 +25,7 @@ export default function ChatHistoryCard({
           />
         </div>
         <p className="test-sm line-clamp-2 h-12 text-muted-foreground">
-          {description}
+          {description.replaceAll("#", "")}
         </p>
         <Separator />
         <div className="flex items-center justify-between">
