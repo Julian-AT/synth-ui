@@ -10,8 +10,10 @@ const LOCAL_STORAGE_KEY = "app-state";
 interface AppState {
   chat: Chat | null;
   isGenerating: boolean;
+  prompt: string; // New prompt state
   setChat: (chat: Chat) => void;
   setIsGenerating: (isGenerating: boolean) => void;
+  setPrompt: (prompt: string) => void; // New setter for prompt
   setSharePath: (isChatPublic: boolean) => void;
   setChatName: (chatName: string) => void;
 }
@@ -19,8 +21,10 @@ interface AppState {
 interface AppStateContext {
   chat: Chat | null;
   isGenerating: boolean;
+  prompt: string;
   setChat: (chat: Chat) => void;
   setIsGenerating: (isGenerating: boolean) => void;
+  setPrompt: (prompt: string) => void; // New setter for prompt
   setSharePath: (sharePath: string | undefined) => void;
   setChatName: (chatName: string) => void;
 }
@@ -45,9 +49,9 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
       const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
       return savedState
         ? JSON.parse(savedState)
-        : { chat: null, isGenerating: false };
+        : { chat: null, isGenerating: false, prompt: "" };
     }
-    return { chat: null, isGenerating: false };
+    return { chat: null, isGenerating: false, prompt: "" };
   });
 
   useEffect(() => {
@@ -62,6 +66,10 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
     setState({ ...state, isGenerating });
   };
 
+  const setPrompt = (prompt: string) => {
+    setState({ ...state, prompt });
+  };
+
   const setSharePath = (sharePath: string | undefined) => {
     setState({
       ...state,
@@ -70,9 +78,13 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
   };
 
   const setChatName = async (chatName: string) => {
+    console.log("setChatName", chatName);
+
     if (!state.chat) {
       return toast.error("No chat found to rename");
     }
+
+    console.log("passed");
 
     const updatedChat = await renameChat(state.chat.id, chatName);
 
@@ -93,8 +105,10 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
   const contextValue: AppStateContext = {
     chat: state.chat,
     isGenerating: state.isGenerating,
+    prompt: state.prompt,
     setChat,
     setIsGenerating,
+    setPrompt,
     setSharePath,
     setChatName,
   };

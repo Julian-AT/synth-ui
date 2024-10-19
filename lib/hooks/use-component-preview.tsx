@@ -27,14 +27,14 @@ interface ComponentPreviewContext {
     title: string,
     fileName: string,
   ) => void;
-  setPreviewCode: (code: string) => void;
   previewCode: string;
   previewTitle: string;
   previewFileName: string;
-  closePreview: () => void;
   activeMessageId: string | null;
   componentCards: AIMessage[];
+  setPreviewCode: (code: string) => void;
   setComponentCards: (cards: AIMessage[]) => void;
+  closePreview: () => void;
 }
 
 const ComponentPreviewContext = createContext<
@@ -75,9 +75,11 @@ export function ComponentPreviewProvider({
 
   const togglePreview = useCallback(
     (messageId: string, code: string, title: string, fileName: string) => {
+      console.log("togglePreview", messageId, code, title, fileName);
+
       setState((prevState) => ({
         ...prevState,
-        isOpen: prevState.messageId !== messageId || true, // !prevState.isOpen,
+        isOpen: prevState.messageId !== messageId || !prevState.isOpen,
         messageId: prevState.messageId !== messageId ? messageId : null,
         code: prevState.messageId !== messageId ? code : prevState.code,
         title: prevState.messageId !== messageId ? title : prevState.title,
@@ -104,15 +106,15 @@ export function ComponentPreviewProvider({
 
   const contextValue: ComponentPreviewContext = {
     isPreviewOpen: state.isOpen,
-    togglePreview,
-    setPreviewCode,
     previewCode: state.code,
     previewTitle: state.title,
     previewFileName: state.fileName,
-    closePreview,
     activeMessageId: state.messageId,
     componentCards,
+    togglePreview,
+    setPreviewCode,
     setComponentCards,
+    closePreview,
   };
 
   return (
