@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { readStreamableValue, useAIState, useUIState } from "ai/rsc";
+import { useAIState, useUIState } from "ai/rsc";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
-import { cn } from "@/lib/utils";
 import { ChatList } from "@/components/chat-list";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EmptyScreen from "@/components/empty-screen";
@@ -25,11 +24,11 @@ interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Chat({ className, missingKeys }: ChatProps) {
   const [aiState] = useAIState<typeof AI>();
   const [messages] = useUIState<typeof AI>();
-  const { setChat, setChatName } = useAppState();
+  const { setChat, setChatName, prompt } = useAppState();
   const { isPreviewOpen, activeMessageId, closePreview, setComponentCards } =
     useComponentPreview();
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  const { messagesRef, scrollRef, visibilityRef } = useScrollAnchor();
+  const { visibilityRef } = useScrollAnchor();
 
   useEffect(() => {
     setIsMounted(true);
@@ -47,40 +46,23 @@ export function Chat({ className, missingKeys }: ChatProps) {
     if (messages.length === 1) {
       window.history.replaceState({}, "", `/chat/${aiState.id}`);
 
-      if (!aiState.title || aiState.title === "") {
-        (async () => {
-          const initialMessage = aiState.messages
-            .filter((m) => m.role === "user")
-            .find((m) => m.content)?.content;
-          console.log("initialMessage", initialMessage);
-          if (initialMessage) {
-            const newTitle = await generateTitle(initialMessage.toString());
-            console.log("newTitle", newTitle);
-            setChatName(newTitle);
-          }
-        })();
-      }
+      // generate title
+      const statelessPrompt = prompt;
+      console.log("statelessPrompt", statelessPrompt);
+      generateTitle(statelessPrompt).then(setChatName);
     }
   }, [messages, aiState.id]);
 
   useEffect(() => {
     if (Array.isArray(messages)) {
-      const filteredCards = messages.filter(async (m) => {
-        if (!m.isComponentCard) return;
-        let isComponentCard = false;
-        for await (const delta of readStreamableValue(m.isComponentCard)) {
-          console.log("delta", delta);
-          if (typeof delta === "boolean") {
-            isComponentCard = delta;
-          }
-        }
-        return isComponentCard;
-      });
+      const filteredCards = messages.filter((m) => m.isComponentCard);
 
       if (isPreviewOpen && activeMessageId) {
         const activeCardExists = filteredCards.some(
           (card) => card.id === activeMessageId,
         );
+        console.log("activeCardExists", activeCardExists, filteredCards);
+
         if (!activeCardExists) {
           closePreview();
         }
