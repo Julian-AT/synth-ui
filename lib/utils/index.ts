@@ -1,36 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { createOpenAI } from "@ai-sdk/openai";
 import { CoreMessage } from "ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-/**
- * Returns a new OpenAI model instance.
- *
- * @param subModel - The submodel to use.
- * @returns openai - OpenAI model instance
- */
-export function getModel(subModel?: string) {
-  const openaiApiBase = process.env.OPENAI_API_BASE;
-  const openaiApiKey = process.env.OPENAI_API_KEY;
-  let openaiApiModel = subModel || process.env.OPENAI_API_MODEL || "gpt-4o";
-
-  if (!openaiApiKey) {
-    throw new Error("Missing environment variable OPENAI_API_KEY");
-  }
-
-  // TODO: implement custom model inference
-
-  const openai = createOpenAI({
-    baseURL: openaiApiBase,
-    apiKey: openaiApiKey,
-    organization: "", // optional
-  });
-
-  return openai.chat(openaiApiModel);
 }
 
 /**
