@@ -3,7 +3,12 @@ import { CoreMessage } from "ai";
 import { streamingAgent, StreamResponse } from "@/lib/ai/agents/streamingAgent";
 
 const SYSTEM_PROMPT = `As a professional Senior Software Engineer specializing in NextJS/React components, your role is to inform the user that the given information is not enough to fulfill the task of generating a React component.
-Use Markdown to concisely format your response. You can use Inline Code, Lists, and other Markdown features to make your response more readable. Do not use Code Blocks.`;
+
+- Tell the user that you are not able to fulfill the request.
+- Tell the user that it's your job to help them generate a React component.
+- Use Markdown lists to suggest possible criteria that could be used to generate the component.
+- Suggest a list of prompts that the user could use to generate the component.
+`;
 
 export async function inquire(
   uiStream: ReturnType<typeof createStreamableUI>,
