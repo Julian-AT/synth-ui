@@ -14,31 +14,13 @@ import {
   PlainMessage,
   UserMessage,
 } from "@/components/chat-message";
-import ComponentCard from "@/components/component-card";
+import ComponentCard, { ComponentCardProps } from "@/components/component-card";
 import { currentUser } from "@clerk/nextjs/server";
 import { saveChat } from "@/lib/actions/chat";
 import ErrorCard from "@/components/error-card";
-import { generateTitle } from "@/lib/ai/agents/title-generator";
-import { workflow } from "./workflow";
+import { workflow } from "@/lib/ai/core/workflow";
 
-export type AIState = Chat;
-
-export type UIState = {
-  id: string;
-  display: ReactNode;
-  isComponentCard?: StreamableValue<boolean>;
-}[];
-
-const initialAIState: AIState = {
-  id: generateId(),
-  title: "",
-  createdAt: new Date(),
-  userId: "",
-  path: "",
-  messages: [],
-};
-
-const initialUIState: UIState = [];
+const MAX_MESSAGES = 6;
 
 async function submitUserMessage(
   formData?: FormData,
@@ -50,7 +32,7 @@ async function submitUserMessage(
   const aiState = getMutableAIState<typeof AI>();
   const uiStream = createStreamableUI();
   const isGenerating = createStreamableValue(true);
-  const isCollapsed = createStreamableValue(false);
+  const isComponentCard = createStreamableValue(false);
 
   const aiMessages = [...(retryMessages ?? aiState.get().messages)];
   const messages = aiMessages
@@ -67,7 +49,7 @@ async function submitUserMessage(
       return { role, content } as CoreMessage;
     });
 
-  messages.splice(0, Math.max(messages.length - 10, 0));
+  messages.splice(0, Math.max(messages.length - MAX_MESSAGES, 0));
 
   const content = skip
     ? `{ "action": "skip" }`
@@ -95,8 +77,8 @@ async function submitUserMessage(
   workflow(
     {
       uiStream,
-      isCollapsed,
       isGenerating,
+      isComponentCard,
     },
     aiState,
     messages,
@@ -106,10 +88,30 @@ async function submitUserMessage(
   return {
     id: generateId(),
     isGenerating: isGenerating.value,
-    isCollapsed: isCollapsed.value,
+    isComponentCard: isComponentCard.value,
     display: uiStream.value,
   };
 }
+
+export type AIState = Chat;
+
+export type UIState = {
+  id: string;
+  display: ReactNode;
+  isGenerating?: StreamableValue<boolean>;
+  isComponentCard?: StreamableValue<boolean>;
+}[];
+
+const initialAIState: AIState = {
+  id: generateId(),
+  title: "",
+  createdAt: new Date(),
+  userId: "",
+  path: "",
+  messages: [],
+};
+
+const initialUIState: UIState = [];
 
 export const AI = createAI<AIState, UIState>({
   actions: {
@@ -143,18 +145,8 @@ export const AI = createAI<AIState, UIState>({
       const user = await currentUser();
 
       if (user) {
-        const { id, messages, createdAt, path } = state;
-        let title = state.title;
+        const { id, messages, createdAt, path, title } = state;
         const userId = user.id;
-
-        if (title === "") {
-          const firstUserMessage = messages
-            .filter((m) => m.role === "user")[0]
-            .content.toString();
-          title = await generateTitle(firstUserMessage);
-        }
-
-        console.log(title);
 
         const chat: Chat = {
           id,
@@ -174,8 +166,6 @@ export const AI = createAI<AIState, UIState>({
 });
 
 export const getUIStateFromAIState = (aiState: AIState): UIState => {
-  const chatId = aiState.id;
-  const isSharePage = !aiState.sharePath === undefined;
   const messages = Array.isArray(aiState.messages) ? aiState.messages : [];
 
   return messages
@@ -198,6 +188,11 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
           answer.done(content);
 
           switch (type) {
+            case "inquiry":
+              return {
+                id,
+                display: <BotMessage content={answer.value} />,
+              };
             case "answer":
               return {
                 id,
@@ -212,19 +207,28 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
         case "tool":
           try {
             const toolOutput = JSON.parse(content);
-            const isCollapsed = createStreamableValue(false);
-            isCollapsed.done(true);
-
             switch (type) {
               case "component_card":
+                const code = createStreamableValue();
+                code.done(toolOutput.result.code);
+
+                const componentCard = toolOutput.result as ComponentCardProps;
+                componentCard.code = code.value;
+
+                const isComponentCard = createStreamableValue(false);
+                isComponentCard.done(true);
+
+                console.log(componentCard);
+
                 return {
                   id,
                   display: (
                     <ComponentCard
                       key={`component-card-${id}`}
-                      {...toolOutput}
+                      {...componentCard}
                     />
                   ),
+                  isComponentCard: isComponentCard.value,
                 };
               case "component_iteration":
                 return {
@@ -233,6 +237,7 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                 };
             }
           } catch (error: any) {
+            console.log(error);
             return {
               id,
               display: (
@@ -246,7 +251,7 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
           return {
             id,
             display: (
-              <ErrorCard message="Ooops! Something went wrong while rendering this message." />
+              <ErrorCard message="Something went wrong while rendering this message." />
             ),
           };
       }
