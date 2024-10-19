@@ -1,9 +1,11 @@
+"use client";
+
 import {
   Sidebar as AceternitySidebar,
   SidebarBody,
 } from "@/components/ui/sidebar";
 import { PlusSignIcon, GithubIcon } from "hugeicons-react";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -11,9 +13,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import UserPanel from "@/components/user-panel";
 import Logo from "@/components/logo";
-import ChatHistory from "@/components/chat-history-widget";
+import ChatHistoryWidget from "@/components/chat-history-widget";
+import UserPanelDialog from "@/components/user-panel-dialog";
+import UserAvatar from "@/components/user-avatar";
 
 export default function Sidebar() {
   return (
@@ -39,7 +42,7 @@ export default function Sidebar() {
                 <p>New Chat</p>
               </TooltipContent>
             </Tooltip>
-            <ChatHistory />
+            <ChatHistoryWidget />
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
@@ -57,10 +60,16 @@ export default function Sidebar() {
                 <p>Source Code</p>
               </TooltipContent>
             </Tooltip>
-            {/* <ThemeToggle /> */}
           </div>
         </div>
-        <UserPanel />
+        <UserPanelDialog>
+          <Button
+            variant="outline"
+            className="aspect-square w-full items-center justify-center rounded-lg px-0 py-0"
+          >
+            <UserAvatar className="rounded-lg" />
+          </Button>
+        </UserPanelDialog>
       </SidebarBody>
     </AceternitySidebar>
   );
