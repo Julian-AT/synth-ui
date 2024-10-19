@@ -8,7 +8,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { ArrowUp02Icon, Attachment01Icon } from "hugeicons-react";
+import {
+  ArrowDown01Icon,
+  ArrowUp02Icon,
+  Attachment01Icon,
+  SparklesIcon,
+} from "hugeicons-react";
 import { useEffect, useRef, useState } from "react";
 import { useActions, useUIState } from "ai/rsc";
 import { AI } from "@/lib/ai/core";
@@ -17,6 +22,7 @@ import { TooltipButton } from "@/components/tooltip-button";
 import { UserMessage } from "@/components/chat-message";
 import { cn } from "@/lib/utils";
 import NotImplementedDialog from "@/components/not-implemented-dialog";
+import { useAppState } from "@/lib/hooks/use-app-state";
 
 interface PromptFormProps extends React.HTMLAttributes<HTMLDivElement> {
   query?: string;
@@ -31,6 +37,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isFirstRender = useRef(true);
   const { onKeyDown, formRef } = useEnterSubmit();
+  const { setPrompt } = useAppState();
 
   useEffect(() => {
     setIsMounted(true);
@@ -53,6 +60,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
     if (!formData) {
       data.append("input", query);
     }
+    setPrompt(query);
     const responseMessage = await submitUserMessage(data);
     console.log("response", responseMessage);
     setMessages((currentMessages) => [...currentMessages, responseMessage]);
@@ -107,29 +115,31 @@ export default function PromptForm({ query, className }: PromptFormProps) {
         onChange={(e) => setInput(e.target.value)}
       />
       <div className="flex w-full justify-between">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-xl bg-background p-1"
-              onClick={(e) => {
-                e.preventDefault();
-                console.log("append file");
-              }}
-            >
-              {isMounted ? (
-                <NotImplementedDialog>
+        <div className="flex gap-2">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-xl bg-background p-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log("append file");
+                }}
+              >
+                {isMounted ? (
+                  <NotImplementedDialog>
+                    <Attachment01Icon className="p-0.5" />
+                    <span className="sr-only">Attach Image</span>
+                  </NotImplementedDialog>
+                ) : (
                   <Attachment01Icon className="p-0.5" />
-                  <span className="sr-only">Attach Image</span>
-                </NotImplementedDialog>
-              ) : (
-                <Attachment01Icon className="p-0.5" />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Attach Image</TooltipContent>
-        </Tooltip>
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Attach Image</TooltipContent>
+          </Tooltip>
+        </div>
         <TooltipButton
           type="submit"
           disabled={input === "" || isGenerating}
