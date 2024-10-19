@@ -10,7 +10,7 @@ export default function ChatHistoryCardSkeleton() {
       <Skeleton className="h-5 text-muted-foreground" />
       <Separator />
       <div className="flex items-center justify-between">
-        <Skeleton className="text-muted-foreground" />
+        <Skeleton className="h-8 w-1/2 text-muted-foreground" />
         <Skeleton className="h-10 w-10" />
       </div>
     </Card>
