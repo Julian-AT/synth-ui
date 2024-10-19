@@ -3,7 +3,7 @@ import {
   ComponentSpecificationSchema,
   PartialComponentSpecificationSchema,
 } from "@/lib/schema/component/specification";
-import { getModel } from "@/lib/utils";
+import { getModel } from "@/lib/utils/getModel";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
 

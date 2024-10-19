@@ -1,6 +1,6 @@
 import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { CoreMessage, streamText } from "ai";
-import { getModel } from "@/lib/utils";
+import { getModel } from "@/lib/utils/getModel";
 import { BotMessage, PlainMessage } from "@/components/chat-message";
 
 export interface StreamResponse {

@@ -1,5 +1,5 @@
 import { streamText } from "ai";
-import { getModel } from "@/lib/utils";
+import { getModel } from "@/lib/utils/getModel";
 
 const SYSTEM_PROMPT = `As an AI specializing in generating catchy and relevant titles, your task is to create a fitting, good-sounding title based on the given query or conversation context. 
 Follow these guidelines:
@@ -10,6 +10,8 @@ Follow these guidelines:
 5. Capitalize the first letter of each major word.
 
 e.g. "Interactive Pricing Calculator", "SaaS Hero Section", "Contact Form with Validation"
+
+If the query is not related to generating react components, respond with a short I cannot help with that.
 
 Respond with only the generated title, without any additional explanation or formatting.`;
 
