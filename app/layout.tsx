@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Metadata, Viewport } from "next";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const title = "Synth UI";
 const description = "Generative User Interfaces for the Web";
@@ -56,6 +58,8 @@ export default function RootLayout({
             <Toaster />
           </main>
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
