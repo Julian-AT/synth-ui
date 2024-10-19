@@ -21,14 +21,14 @@ import { ComponentCardProps } from "@/components/component-card";
 export async function workflow(
   uiState: {
     uiStream: ReturnType<typeof createStreamableUI>;
-    isCollapsed: ReturnType<typeof createStreamableValue<boolean>>;
     isGenerating: ReturnType<typeof createStreamableValue<boolean>>;
+    isComponentCard: ReturnType<typeof createStreamableValue<boolean>>;
   },
   aiState: any,
   messages: CoreMessage[],
   skip: boolean,
 ) {
-  const { uiStream, isCollapsed, isGenerating } = uiState;
+  const { uiStream, isGenerating } = uiState;
 
   try {
     const id = generateId();
@@ -56,7 +56,7 @@ export async function workflow(
         messages: [
           ...aiState.get().messages,
           {
-            id: generateId(),
+            id,
             role: "assistant",
             content: inquiry.response,
             type: "inquiry",
@@ -77,6 +77,8 @@ export async function workflow(
       const fileName = specification.fileName;
       const title = camelCaseToSpaces(specification.componentName);
       const component = await componentGenerator(uiStream, specification, id);
+
+      uiState.isComponentCard.done(true);
 
       if (component.hasError) {
         throw new Error(
