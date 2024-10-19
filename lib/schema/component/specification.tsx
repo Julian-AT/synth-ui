@@ -1,5 +1,10 @@
 import { z } from "zod";
 import { DeepPartial } from "ai";
+import shadcnUIComponentsDump from "@/public/assets/content/external/components/shadcn/dump.json";
+import lucideIconsDump from "@/public/assets/content/external/icons/lucide/dump.json";
+
+const shadcnUIComponents = [...shadcnUIComponentsDump] as const;
+const lucideIcons = [...lucideIconsDump] as const;
 
 // Enum for common types
 const propTypes = z
@@ -30,26 +35,6 @@ const propSchema = z.object({
     .describe(
       "Provides additional context or usage information for the property.",
     ),
-});
-
-// Schema for external imports
-const externalImportsSchema = z.object({
-  imports: z
-    .array(
-      z.object({
-        name: z
-          .string()
-          .describe(
-            "The name of the external entity to be imported, such as a function or component.",
-          ),
-        reason: z
-          .string()
-          .describe(
-            "A concise explanation outlining the rationale for including this import.",
-          ),
-      }),
-    )
-    .describe("A list of external imports that the component requires."),
 });
 
 // Schema for states used in the component
@@ -106,13 +91,17 @@ const accessibilitySchema = z.object({
 });
 
 // Main schema for the component specification
-
 const uiLibraryImportSchema = z.object({
   imports: z
     .array(
       z.object({
         name: z
-          .string()
+          .enum(
+            shadcnUIComponents.map((component) => component.name) as [
+              string,
+              ...string[],
+            ],
+          )
           .describe(
             "The name of the UI component being imported from a library.",
           ),
@@ -134,7 +123,7 @@ const iconLibraryImportSchema = z.object({
     .array(
       z.object({
         name: z
-          .string()
+          .enum(lucideIcons.map((icon) => icon.name) as [string, ...string[]])
           .describe(
             "The name of the icon being imported from the icon library.",
           ),
@@ -164,20 +153,6 @@ export const componentSpecificationSchema = z.object({
     .describe(
       "A list of properties (props) that the component accepts, with associated metadata.",
     ),
-
-  // usesExternalLibraries: z
-  //   .boolean()
-  //   .default(false)
-  //   .describe(
-  //     'Indicates if external libraries are utilized. If "externalImports" are defined, this should be true.',
-  //   ),
-
-  // externalImports: externalImportsSchema
-  //   .optional()
-  //   .describe(
-  //     "Specifies any external libraries, functions, or components required by the component.",
-  //   ),
-
   uiLibraryImports: uiLibraryImportSchema
     .optional()
     .describe(
