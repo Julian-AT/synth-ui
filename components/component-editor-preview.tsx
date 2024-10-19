@@ -2,7 +2,7 @@
 
 import { createRef, useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BrowserIcon, CodeFolderIcon } from "hugeicons-react";
+import { Alert02Icon, BrowserIcon, CodeFolderIcon } from "hugeicons-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 import { MarkdownBlock } from "@/components/chat-message";
@@ -16,8 +16,18 @@ export default function ComponentEditorPreview() {
     setIsMounted(true);
   }, []);
 
+  console.log(activeMessageId);
+
   if (!isMounted || !isPreviewOpen || !activeMessageId) {
-    return null;
+    return (
+      <div>
+        <div className="flex h-screen flex-col items-center justify-center">
+          <Alert02Icon className="h-10 w-10" />
+          <span>Something went wrong while loading the preview.</span>
+          <span className="text-muted-foreground">Please try again later.</span>
+        </div>
+      </div>
+    );
   }
 
   return (
