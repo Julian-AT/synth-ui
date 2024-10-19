@@ -12,11 +12,11 @@ export function ChatList({ messages }: ChatList) {
   }
 
   return (
-    <div className="relative mx-auto mb-12 max-h-full max-w-3xl px-4">
+    <div className="relative mx-auto mb-12 mt-2 max-h-full max-w-3xl px-4">
       {messages
         .filter((m) => m.display !== undefined)
         .map((message, index) => (
-          <div key={`${message.id}-${index}`}>
+          <div key={`${message.id}-${index}`} className="my-5">
             {message.display}
             {index < messages.length - 1 &&
               messages[index + 1].id !== message.id && (

@@ -19,6 +19,12 @@ export function MarkdownBlock({ content }: { content: string }) {
         className="prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words"
         remarkPlugins={[remarkGfm, remarkMath]}
         components={{
+          ul({ children }) {
+            return <ul className="mb-3 list-inside list-disc">{children}</ul>;
+          },
+          ol({ children }) {
+            return <ol className="list-inside list-decimal">{children}</ol>;
+          },
           b({ children }) {
             return <b className="px-1 font-bold">{children}</b>;
           },
