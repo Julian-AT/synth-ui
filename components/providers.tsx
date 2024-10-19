@@ -9,6 +9,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ComponentPreviewProvider } from "@/lib/hooks/use-component-preview";
 import { experimental__simple } from "@clerk/themes";
 import { AppStateProvider } from "@/lib/hooks/use-app-state";
+import { LLMSelectionProvider } from "@/lib/hooks/use-selected-llm";
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
@@ -21,7 +22,9 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
         <ComponentPreviewProvider>
           <SidebarProvider>
             <TooltipProvider delayDuration={50}>
-              <AppStateProvider>{children}</AppStateProvider>
+              <AppStateProvider>
+                <LLMSelectionProvider>{children}</LLMSelectionProvider>
+              </AppStateProvider>
             </TooltipProvider>
           </SidebarProvider>
         </ComponentPreviewProvider>
