@@ -32,3 +32,11 @@ export type ExamplePrompt = {
   label: string;
   prompt: string;
 };
+
+export type LLMSelection =
+  | "claude-3.5-sonnet"
+  | "gpt-4o"
+  | "gpt-4o-mini"
+  | "synth-ui-v1";
+
+export type UserRole = "user" | "admin" | "contributor";
