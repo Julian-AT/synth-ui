@@ -39,13 +39,7 @@ export default function ComponentCard({
 
   useEffect(() => {
     if (isMounted) {
-      console.log(
-        "setting first preview",
-        messageId,
-        streamedCode,
-        title,
-        fileName,
-      );
+      console.log(messageId, streamedCode, title, fileName);
 
       togglePreview(messageId, streamedCode, title, fileName);
     }
@@ -56,11 +50,11 @@ export default function ComponentCard({
   }, [streamedCode, setPreviewCode]);
 
   const handleClick = useCallback(() => {
+    console.log(activeMessageId, messageId);
+
     if (isPreviewOpen && activeMessageId === messageId) {
-      console.log("closing preview");
       closePreview();
     } else {
-      console.log("opening preview");
       togglePreview(messageId, streamedCode, title, fileName);
     }
   }, [
@@ -81,7 +75,7 @@ export default function ComponentCard({
       <Button
         variant={"outline"}
         className={cn(
-          "my-3 h-[55px] max-h-full w-full justify-start gap-3 rounded-lg bg-background p-1.5 hover:bg-secondary/50 md:w-[400px]",
+          "-my-2 h-[55px] max-h-full w-full justify-start gap-3 rounded-lg bg-background p-1.5 hover:bg-secondary/50 md:w-[400px]",
           isPreviewOpen &&
             activeMessageId === messageId &&
             "ring-1 ring-primary/15",
