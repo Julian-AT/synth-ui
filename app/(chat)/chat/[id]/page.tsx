@@ -26,10 +26,13 @@ export async function generateMetadata({
   if (!chat || "error" in chat) {
     redirect("/chat");
   } else {
+    let title = chat?.title.toString().slice(0, 50);
+    if (!title || title.length === 0) {
+      title = "Untitled Chat";
+    }
+
     return {
-      title:
-        (chat?.title.toString().slice(0, 50) ?? "Untitled Chat") +
-        " - Synth UI",
+      title: `${title} - Synth UI`,
     };
   }
 }
