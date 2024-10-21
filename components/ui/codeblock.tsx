@@ -15,6 +15,7 @@ import {
 
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
 import { useTheme } from "next-themes";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface Props {
   language: string;
@@ -94,7 +95,7 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
   };
 
   return (
-    <div className="codeblock relative w-full font-sans">
+    <div className="codeblock w-full overflow-hidden font-sans">
       <SyntaxHighlighter
         language={language}
         style={theme === "dark" ? coldarkDark : oneLight}
@@ -102,10 +103,9 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
         showLineNumbers
         customStyle={{
           margin: 0,
-          overflow: "auto",
+          overflow: "hidden",
           background: "transparent",
-          padding: "0.5rem 1.5rem 0.5rem 0",
-          maxWidth: "100%",
+          padding: "0rem 3rem 1rem 0rem",
         }}
         lineNumberStyle={{
           userSelect: "none",
@@ -116,9 +116,14 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
             fontFamily: "var(--font-mono)",
           },
         }}
+        wrapLines
       >
         {value}
       </SyntaxHighlighter>
+      <ScrollBar
+        orientation="horizontal"
+        className="max-w-screen sticky mb-0.5"
+      />
     </div>
   );
 });
