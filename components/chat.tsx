@@ -15,7 +15,6 @@ import ChatHeader from "@/components/chat-header";
 import { toast } from "sonner";
 import { ChatListSkeleton } from "@/components/chat-list-skeleton";
 import { useAppState } from "@/lib/hooks/use-app-state";
-import { generateTitle } from "@/lib/ai/agents/title-generator";
 
 interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
   missingKeys?: string[];
@@ -24,7 +23,7 @@ interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Chat({ className, missingKeys }: ChatProps) {
   const [aiState] = useAIState<typeof AI>();
   const [messages] = useUIState<typeof AI>();
-  const { setChat, setIsGenerating, isGenerating } = useAppState();
+  const { setChat } = useAppState();
   const { isPreviewOpen, activeMessageId, closePreview, setComponentCards } =
     useComponentPreview();
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -56,8 +55,6 @@ export function Chat({ className, missingKeys }: ChatProps) {
         const activeCardExists = filteredCards.some(
           (card) => card.id === activeMessageId,
         );
-        console.log("activeCardExists", activeCardExists, filteredCards);
-
         if (!activeCardExists) {
           closePreview();
         }
@@ -73,12 +70,6 @@ export function Chat({ className, missingKeys }: ChatProps) {
 
   useEffect(() => {
     setChat(aiState);
-    console.log("aiState change", aiState);
-
-    const lastMessage = aiState.messages.at(-1);
-    if (lastMessage?.type === "inquiry" || lastMessage?.type === "follow_up") {
-      setIsGenerating(false);
-    }
   }, [aiState]);
 
   if (!isMounted) {
@@ -99,7 +90,6 @@ export function Chat({ className, missingKeys }: ChatProps) {
       {messages.length ? (
         <div className="relative flex h-screen max-h-screen flex-col overflow-hidden">
           <ChatHeader />
-          {isGenerating ? "Generating" : "Not Generating"}
           <div className="flex flex-1 flex-col overflow-auto">
             <ScrollArea className="h-full w-full overflow-auto pb-32">
               <ChatList messages={messages} isShared={false} />
