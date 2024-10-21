@@ -15,6 +15,8 @@ export async function componentGenerator(
   let fullResponse = "";
   let hasError = false;
   const streamableAnswer = createStreamableValue<string>("");
+  console.log("messageId", messageId);
+
   const componentCard = (
     <ComponentCard
       code={streamableAnswer.value}
@@ -27,7 +29,7 @@ export async function componentGenerator(
 
   uiStream.update(componentCard);
 
-  uiStream.update(<>{streamableAnswer.value}</>);
+  // uiStream.update(<BotMessage content={streamableAnswer.value} />);
 
   try {
     await streamText({
