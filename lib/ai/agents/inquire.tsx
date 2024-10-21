@@ -7,7 +7,6 @@ const SYSTEM_PROMPT = `As a professional Senior Software Engineer specializing i
 - Tell the user that you are not able to fulfill the request.
 - Tell the user that it's your job to help them generate a React component.
 - Use Markdown lists to suggest possible criteria that could be used to generate the component.
-- Suggest a list of prompts that the user could use to generate the component.
 `;
 
 export async function inquire(
