@@ -4,6 +4,8 @@ import { formatDate } from "@/lib/utils";
 import { getSharedChat } from "@/lib/actions/chat";
 import { ChatList } from "@/components/chat-list";
 import { AI, UIState, getUIStateFromAIState } from "@/lib/ai/core";
+import { Badge } from "@/components/ui/badge";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export const runtime = "edge";
 export const preferredRegion = "home";
@@ -49,6 +51,9 @@ export default async function SharePage({ params }: SharePageProps) {
         <AI initialAIState={chat} initialUIState={uiState}>
           <ChatList messages={uiState} isShared={true} />
         </AI>
+        {/* <Badge className="absolute bottom-2 left-2 border bg-secondary text-secondary-foreground"> */}
+        {/* Shared by {chat.userId} */}
+        {/* </Badge> */}
       </div>
     </>
   );

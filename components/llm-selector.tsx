@@ -1,8 +1,8 @@
 "use client";
 
 import { LLMSelection } from "@/lib/types";
-import { Button } from "./ui/button";
-import Logo from "./logo";
+import { Button } from "@/components/ui/button";
+import Logo from "@/components/logo";
 import {
   ArrowDown01Icon,
   Forward02Icon,

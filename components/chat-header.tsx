@@ -18,7 +18,7 @@ import { ChatShareDialog } from "@/components/chat-share-dialog";
 import { ChatDropdown } from "@/components/chat-dropdown";
 import { useAppState } from "@/lib/hooks/use-app-state";
 import { usePathname } from "next/navigation";
-import ChatRenameDialog from "./chat-rename-dialog";
+import ChatRenameDialog from "@/components/chat-rename-dialog";
 import { motion } from "framer-motion";
 
 export default function ChatHeader() {

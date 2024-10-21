@@ -11,8 +11,8 @@ import { ArrowRight02Icon, GithubIcon } from "hugeicons-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Suspense, useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Skeleton } from "../ui/skeleton";
-import PulsatingButton from "../ui/pulsating-button";
+import { Skeleton } from "@/components/ui/skeleton";
+import PulsatingButton from "@/components/ui/pulsating-button";
 
 export const Hero = () => {
   const [isMounted, setIsMounted] = useState<boolean>(false);

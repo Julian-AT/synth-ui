@@ -16,11 +16,11 @@ export function ChatList({ messages }: ChatList) {
       {messages
         .filter((m) => m.display !== undefined)
         .map((message, index) => (
-          <div key={`${message.id}-${index}`} className="my-5">
+          <div key={`${message.id}-${index}`}>
             {message.display}
             {index < messages.length - 1 &&
               messages[index + 1].id !== message.id && (
-                <Separator className="my-4" />
+                <Separator className="my-5" />
               )}
           </div>
         ))}
