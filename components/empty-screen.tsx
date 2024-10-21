@@ -24,7 +24,6 @@ export default function EmptyScreen() {
         <ExamplePrompts className="flex py-12 md:hidden md:py-0" />
       </div>
       <div className="relative z-10 w-full space-y-3 md:mt-4">
-        <div className="hidden md:block"></div>
         <PromptForm />
       </div>
       <ExamplePrompts className="hidden md:flex" />
