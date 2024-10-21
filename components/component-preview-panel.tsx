@@ -32,9 +32,23 @@ export default function ComponentPreviewPanel() {
   if (!isPreviewOpen || !isMounted) return null;
 
   return (
+    <>
+      <ResizableHandle className="h-full min-h-screen bg-secondary" />
+      <ResizablePanel
+        minSize={33}
+        defaultSize={100}
+        className="flex h-full max-h-screen flex-col overflow-hidden"
+      >
+        <ComponentEditorPreviewHeader title={previewTitle} />
+        <ComponentEditorPreview />
+      </ResizablePanel>
+    </>
+  );
+
+  return (
     <div className="h-full max-h-screen overflow-hidden">
       {width >= 1280 ? (
-        <div className="flex h-full max-h-screen">
+        <div className="flex h-full max-h-screen bg-red-500">
           <ResizableHandle className="h-full min-h-screen bg-secondary" />
           <ResizablePanel
             defaultSize={100}
