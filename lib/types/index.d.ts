@@ -40,3 +40,7 @@ export type LLMSelection =
   | "synth-ui-v1";
 
 export type UserRole = "user" | "admin" | "contributor" | "demo";
+
+export type UILibrary = "nextui" | "shadcn" | "flowbite";
+
+export type IconLibrary = "lucide-react";
