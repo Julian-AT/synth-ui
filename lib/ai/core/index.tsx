@@ -75,6 +75,8 @@ async function submitUserMessage(
     });
   }
 
+  const id = generateId();
+
   workflow(
     {
       uiStream,
@@ -84,10 +86,11 @@ async function submitUserMessage(
     aiState,
     messages,
     skip ?? false,
+    id,
   );
 
   return {
-    id: generateId(),
+    id,
     isGenerating: isGenerating.value,
     isComponentCard: isComponentCard.value,
     display: uiStream.value,
@@ -154,7 +157,6 @@ export const AI = createAI<AIState, UIState>({
           title = await generateTitle(
             messages.find((m) => m.role === "user")?.content ?? "",
           );
-          console.log("generated new title", title);
         }
 
         const chat: Chat = {
@@ -244,7 +246,6 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                 };
             }
           } catch (error: any) {
-            console.log(error);
             return {
               id,
               display: (

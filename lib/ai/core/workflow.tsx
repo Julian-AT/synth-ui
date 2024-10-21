@@ -17,7 +17,7 @@ import {
 } from "@/lib/ai/agents";
 import { camelCaseToSpaces } from "@/lib/utils";
 import ComponentCardSkeleton from "@/components/component-card-skeleton";
-import { componentGenerator } from "../agents/component-generator";
+import { componentGenerator } from "@/lib/ai/agents/component-generator";
 import ErrorCard from "@/components/error-card";
 import { componentSummarizer } from "@/lib/ai/agents/component-summarizer";
 import { ComponentCardProps } from "@/components/component-card";
@@ -32,11 +32,12 @@ export async function workflow(
   aiState: ReturnType<typeof getMutableAIState<typeof AI>>,
   messages: CoreMessage[],
   skip: boolean,
+  messageId?: string,
 ) {
-  const { uiStream } = uiState;
+  const { uiStream, isComponentCard } = uiState;
 
   try {
-    const id = generateId();
+    const id = messageId ?? generateId();
 
     uiStream.update(<SpinnerMessage />);
 
@@ -55,7 +56,6 @@ export async function workflow(
         throw new Error("An error occured while generating the component.");
       }
 
-      uiStream.done();
       aiState.done({
         ...aiState.get(),
         messages: [
@@ -81,9 +81,14 @@ export async function workflow(
 
       const fileName = specification.fileName;
       const title = camelCaseToSpaces(specification.componentName);
-      const component = await componentGenerator(uiStream, specification, id);
+      const component = await componentGenerator(
+        uiStream,
+        specification,
+        id,
+        true,
+      );
 
-      uiState.isComponentCard.done(true);
+      isComponentCard.done(true);
 
       if (component.hasError) {
         throw new Error(
@@ -138,5 +143,7 @@ export async function workflow(
     uiStream.update(
       <ErrorCard message={error.message ?? "An unknown error occured."} />,
     );
+  } finally {
+    uiStream.done();
   }
 }
