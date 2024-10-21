@@ -17,7 +17,7 @@ module.exports = {
   prefix: "",
   theme: {
     container: {
-      center: true,
+      center: "true",
       padding: "2rem",
       screens: {
         "2xl": "1400px",
@@ -109,6 +109,14 @@ module.exports = {
             "background-position": "200%",
           },
         },
+        pulse: {
+          "0%, 100%": {
+            boxShadow: "0 0 0 0 var(--pulse-color)",
+          },
+          "50%": {
+            boxShadow: "0 0 0 8px var(--pulse-color)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -116,6 +124,7 @@ module.exports = {
         scroll:
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
         rainbow: "rainbow var(--speed, 2s) infinite linear",
+        pulse: "pulse var(--duration) ease-out infinite",
       },
     },
   },
