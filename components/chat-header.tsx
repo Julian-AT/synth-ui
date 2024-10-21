@@ -19,18 +19,14 @@ import { ChatDropdown } from "@/components/chat-dropdown";
 import { useAppState } from "@/lib/hooks/use-app-state";
 import { usePathname } from "next/navigation";
 import ChatRenameDialog from "./chat-rename-dialog";
+import { motion } from "framer-motion";
 
 export default function ChatHeader() {
   const pathname = usePathname();
   const { chat } = useAppState();
   const { open, setOpen } = useSidebar();
 
-  console.log("detected change in chat", chat?.id, chat?.sharePath);
-
-  console.log("pathname", pathname);
-  console.log("chat.path", chat?.path);
-
-  if (!chat || pathname !== chat.path) {
+  if (!chat || (pathname !== chat.path && chat.path !== "")) {
     return null;
   }
 
@@ -48,7 +44,15 @@ export default function ChatHeader() {
 
         <div className="flex items-center gap-1.5">
           <ChatRenameDialog>
-            <span className="cursor-pointer hover:underline">{chat.title}</span>
+            <motion.div
+              className="cursor-pointer overflow-hidden truncate hover:underline"
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              key={chat.title}
+            >
+              {chat.title}
+            </motion.div>
           </ChatRenameDialog>
           <ChatShareDialog>
             {chat.sharePath ? (
