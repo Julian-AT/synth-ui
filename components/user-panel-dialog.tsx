@@ -22,6 +22,7 @@ const userRoleMap: Record<UserRole, string> = {
   user: "bg-secondary text-secondary-foreground hover:bg-secondary/90",
   admin: "bg-red-500 text-primary-foreground hover:bg-red-600",
   contributor: "bg-violet-700 text-violet-50-foreground hover:bg-violet-800",
+  demo: "bg-red-500 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 bg-[length:300%_auto] animate-gradient",
 };
 
 export default function UserPanelDialog({ children }: UserPanelDialogProps) {

@@ -39,4 +39,4 @@ export type LLMSelection =
   | "gpt-4o-mini"
   | "synth-ui-v1";
 
-export type UserRole = "user" | "admin" | "contributor";
+export type UserRole = "user" | "admin" | "contributor" | "demo";
