@@ -118,6 +118,9 @@ module.exports = {
             boxShadow: "0 0 0 8px var(--pulse-color)",
           },
         },
+        gradient: {
+          to: { "background-position": "200% center" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -126,6 +129,7 @@ module.exports = {
           "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
         rainbow: "rainbow var(--speed, 2s) infinite linear",
         pulse: "pulse var(--duration) ease-out infinite",
+        gradient: "gradient 8s linear infinite",
       },
     },
   },
