@@ -105,6 +105,16 @@ const uiLibraryImportSchema = z.object({
           .describe(
             "The name of the UI component being imported from a library.",
           ),
+        importStatement: z
+          .string()
+          .min(0)
+          .max(0)
+          .describe("Leave this field blank."),
+        exampleUsage: z
+          .string()
+          .min(0)
+          .max(0)
+          .describe("Leave this field blank."),
         reason: z
           .string()
           .describe(
@@ -119,6 +129,9 @@ const uiLibraryImportSchema = z.object({
 
 // Schema for icon library imports
 const iconLibraryImportSchema = z.object({
+  iconLibrary: z
+    .enum(["lucide"])
+    .describe("The icon library being used for the component."),
   imports: z
     .array(
       z.object({
@@ -148,6 +161,12 @@ export const componentSpecificationSchema = z.object({
     .describe(
       "A fitting name to store the component file. e.g. 'component-name.tsx'",
     ),
+  isClientComponent: z
+    .boolean()
+    .default(false)
+    .describe(
+      "Indicates if the component is a client component, which allows it to use React hooks and other client-side features.",
+    ),
   props: z
     .array(propSchema)
     .describe(
@@ -156,7 +175,7 @@ export const componentSpecificationSchema = z.object({
   uiLibraryImports: uiLibraryImportSchema
     .optional()
     .describe(
-      "Lists UI components sourced from a UI library that are utilized by the component.",
+      "Lists UI components sourced from a UI library that are utilized by the component. Make use of as much reusable components from the library as possible. Even if task doesnt specifically ask for it, try to use a button, input, card, etc. from the library.",
     ),
 
   iconLibraryImports: iconLibraryImportSchema
@@ -192,7 +211,9 @@ export const componentSpecificationSchema = z.object({
 });
 
 export type ComponentSpecificationSchema = z.infer<
-  typeof componentSpecificationSchema
+  typeof componentSpecificationSchema & {
+    importStatement: string;
+  }
 >;
 
 export type PartialComponentSpecificationSchema =

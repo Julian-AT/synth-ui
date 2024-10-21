@@ -6,6 +6,8 @@ import {
 import { getModel } from "@/lib/utils/getModel";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
+import shadcnUIComponentsDump from "@/public/assets/content/external/components/shadcn/dump.json";
+import fs from "fs";
 
 export async function componentSpecification(
   messages: CoreMessage[],
@@ -39,14 +41,39 @@ export async function componentSpecification(
         objectStream.done();
       });
 
+    // fill in importStatement and exampleUsage
+    const uiLibraryImports = (
+      (finalComponentSpecification as ComponentSpecificationSchema)
+        .uiLibraryImports?.imports || []
+    ).map((uiLibraryImport) => {
+      const component = shadcnUIComponentsDump.find(
+        (c) => c.name === uiLibraryImport.name,
+      );
+
+      return {
+        ...uiLibraryImport,
+        importStatement: component?.docs.import?.code || "",
+        exampleUsage: component?.docs.use[0].code || "",
+      };
+    });
+
+    const specification = {
+      ...finalComponentSpecification,
+      uiLibraryImports: {
+        imports: [...(uiLibraryImports ?? [])],
+      },
+    } as ComponentSpecificationSchema;
+
     // Validate final specification
-    if (!finalComponentSpecification) {
+    if (!specification) {
       throw new Error(
         "Generated component specification is incomplete or invalid",
       );
     }
 
-    return finalComponentSpecification as ComponentSpecificationSchema;
+    fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
+
+    return specification;
   } catch (error) {
     console.error("Error generating component specification:", error);
     throw error;
