@@ -16,8 +16,6 @@ export const MobileNavbar = ({ navItems }: any) => {
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    console.log(latest);
-
     if (latest > 100) {
       setShowBackground(true);
     } else {
@@ -46,7 +44,7 @@ export const MobileNavbar = ({ navItems }: any) => {
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-50 flex flex-col items-start justify-start space-y-10 bg-white pt-5 text-xl text-zinc-600 transition duration-200 hover:text-zinc-800 dark:bg-black"
         >
-          <div className="flex w-full items-center justify-between px-5">
+          <div className="flex w-full items-center justify-between">
             <Logo />
             <div className="flex items-center space-x-2">
               <ModeToggle />

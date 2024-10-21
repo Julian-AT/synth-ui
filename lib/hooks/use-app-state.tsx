@@ -78,13 +78,9 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
   };
 
   const setChatName = async (chatName: string) => {
-    console.log("setChatName", chatName);
-
     if (!state.chat) {
       return toast.error("No chat found to rename");
     }
-
-    console.log("passed");
 
     const updatedChat = await renameChat(state.chat.id, chatName);
 

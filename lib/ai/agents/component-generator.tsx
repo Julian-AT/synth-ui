@@ -11,11 +11,11 @@ export async function componentGenerator(
   uiStream: ReturnType<typeof createStreamableUI>,
   specification: ComponentSpecificationSchema,
   messageId: string,
+  update: boolean = false,
 ): Promise<StreamResponse> {
   let fullResponse = "";
   let hasError = false;
   const streamableAnswer = createStreamableValue<string>("");
-  console.log("messageId", messageId);
 
   const componentCard = (
     <ComponentCard
@@ -27,7 +27,11 @@ export async function componentGenerator(
     />
   );
 
-  uiStream.update(componentCard);
+  if (update) {
+    uiStream.update(componentCard);
+  } else {
+    uiStream.append(componentCard);
+  }
 
   // uiStream.update(<BotMessage content={streamableAnswer.value} />);
 

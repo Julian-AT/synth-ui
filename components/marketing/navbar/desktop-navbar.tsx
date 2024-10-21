@@ -33,13 +33,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
 
   const [showBackground, setShowBackground] = useState<boolean>(false);
 
-  scrollY.on("change", (v) => {
-    console.log(v);
-  });
-
   useMotionValueEvent(scrollY, "change", (value) => {
-    console.log(value);
-
     if (value > 100) {
       setShowBackground(true);
     } else {

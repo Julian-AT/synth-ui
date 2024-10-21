@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { getChats } from "@/lib/actions/chat";
-import { Chat } from "../types";
+import { Chat } from "@/lib/types";
 
 interface ChatStore {
   chats: Chat[] | null;
@@ -14,7 +14,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   isLoading: false,
   error: null,
   fetchChats: async (userId: string) => {
-    console.log("fetching chats", userId);
     set({ isLoading: true, error: null });
     try {
       const fetchedChats = await getChats(userId);

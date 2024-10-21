@@ -188,8 +188,6 @@ export async function unshareChat(id: string) {
 export async function saveChat(chat: Chat) {
   const user = await currentUser();
 
-  console.log("Saving chat");
-
   if (user) {
     const pipeline = kv.pipeline();
     pipeline.hmset(`chat:${chat.id}`, chat);

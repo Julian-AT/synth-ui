@@ -35,10 +35,7 @@ export default function ChatRenameDialog({
 
   const handleSubmit = async () => {
     setIsLoading(true);
-
-    // optimistically update the title
     setChatName(name);
-    console.log(chat.title);
 
     const res = await renameChat(id, name);
     if (!res || !res.success || "error" in res) {

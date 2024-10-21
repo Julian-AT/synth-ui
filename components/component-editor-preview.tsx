@@ -16,8 +16,6 @@ export default function ComponentEditorPreview() {
     setIsMounted(true);
   }, []);
 
-  console.log(activeMessageId);
-
   if (!isMounted || !isPreviewOpen || !activeMessageId) {
     return (
       <div>

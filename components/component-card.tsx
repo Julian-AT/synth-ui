@@ -39,8 +39,6 @@ export default function ComponentCard({
 
   useEffect(() => {
     if (isMounted) {
-      console.log(messageId, streamedCode, title, fileName);
-
       togglePreview(messageId, streamedCode, title, fileName);
     }
   }, [isMounted]);
@@ -50,8 +48,6 @@ export default function ComponentCard({
   }, [streamedCode, setPreviewCode]);
 
   const handleClick = useCallback(() => {
-    console.log(activeMessageId, messageId);
-
     if (isPreviewOpen && activeMessageId === messageId) {
       closePreview();
     } else {
