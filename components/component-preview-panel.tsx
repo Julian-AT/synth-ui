@@ -31,46 +31,28 @@ export default function ComponentPreviewPanel() {
 
   if (!isPreviewOpen || !isMounted) return null;
 
-  return (
+  return width >= 1280 ? (
     <>
       <ResizableHandle className="h-full min-h-screen bg-secondary" />
       <ResizablePanel
-        minSize={33}
         defaultSize={100}
+        minSize={33}
         className="flex h-full max-h-screen flex-col overflow-hidden"
       >
         <ComponentEditorPreviewHeader title={previewTitle} />
         <ComponentEditorPreview />
       </ResizablePanel>
     </>
-  );
-
-  return (
-    <div className="h-full max-h-screen overflow-hidden">
-      {width >= 1280 ? (
-        <div className="flex h-full max-h-screen bg-red-500">
-          <ResizableHandle className="h-full min-h-screen bg-secondary" />
-          <ResizablePanel
-            defaultSize={100}
-            minSize={50}
-            className="flex h-full max-h-screen flex-col overflow-hidden"
-          >
-            <ComponentEditorPreviewHeader title={previewTitle} />
-            <ComponentEditorPreview />
-          </ResizablePanel>
-        </div>
-      ) : (
-        <Drawer
-          open={isPreviewOpen}
-          autoFocus
-          onOpenChange={(o) => (!o ? closePreview() : null)}
-        >
-          <DrawerContent className="h-full max-h-[90%]">
-            <ComponentEditorPreviewHeader title={previewTitle} />
-            <ComponentEditorPreview />
-          </DrawerContent>
-        </Drawer>
-      )}
-    </div>
+  ) : (
+    <Drawer
+      open={isPreviewOpen}
+      autoFocus
+      onOpenChange={(o) => (!o ? closePreview() : null)}
+    >
+      <DrawerContent className="h-full max-h-[90%]">
+        <ComponentEditorPreviewHeader title={previewTitle} />
+        <ComponentEditorPreview />
+      </DrawerContent>
+    </Drawer>
   );
 }
