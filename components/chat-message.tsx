@@ -67,7 +67,7 @@ export function MarkdownBlock({ content }: { content: string }) {
                 <code
                   className={cn(
                     className,
-                    "rounded-md border bg-secondary px-1 font-medium text-secondary-foreground shadow-sm",
+                    "rounded-md bg-secondary px-1 font-medium text-secondary-foreground shadow-sm",
                   )}
                   {...props}
                 >
