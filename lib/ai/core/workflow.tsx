@@ -3,7 +3,11 @@
 import { SpinnerMessage } from "@/components/chat-message";
 import { nextActionSchema } from "@/lib/schema/next-action";
 import { CoreMessage, generateId } from "ai";
-import { createStreamableUI, createStreamableValue } from "ai/rsc";
+import {
+  createStreamableUI,
+  createStreamableValue,
+  getMutableAIState,
+} from "ai/rsc";
 import { z } from "zod";
 import {
   componentAbstract,
@@ -15,8 +19,9 @@ import { camelCaseToSpaces } from "@/lib/utils";
 import ComponentCardSkeleton from "@/components/component-card-skeleton";
 import { componentGenerator } from "../agents/component-generator";
 import ErrorCard from "@/components/error-card";
-import { componentSummarizer } from "../agents/component-summarizer";
+import { componentSummarizer } from "@/lib/ai/agents/component-summarizer";
 import { ComponentCardProps } from "@/components/component-card";
+import { AI } from "@/lib/ai/core";
 
 export async function workflow(
   uiState: {
@@ -24,11 +29,11 @@ export async function workflow(
     isGenerating: ReturnType<typeof createStreamableValue<boolean>>;
     isComponentCard: ReturnType<typeof createStreamableValue<boolean>>;
   },
-  aiState: any,
+  aiState: ReturnType<typeof getMutableAIState<typeof AI>>,
   messages: CoreMessage[],
   skip: boolean,
 ) {
-  const { uiStream, isGenerating } = uiState;
+  const { uiStream } = uiState;
 
   try {
     const id = generateId();
@@ -118,7 +123,7 @@ export async function workflow(
             }),
           },
           {
-            id: id,
+            id,
             role: "assistant",
             content: summary.response,
             type: "follow_up",
