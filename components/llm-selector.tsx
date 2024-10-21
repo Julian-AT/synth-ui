@@ -9,7 +9,6 @@ import {
   InformationCircleIcon,
   SparklesIcon,
 } from "hugeicons-react";
-import { useSelectedLLM } from "@/lib/hooks/use-selected-llm";
 import {
   Select,
   SelectContent,
@@ -20,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useAppSettings } from "@/lib/hooks/use-app-settings";
 
 interface LLMItem {
   icon: React.ReactNode;
@@ -31,8 +31,9 @@ interface LLMItem {
 }
 
 export default function LLMSelector() {
-  const { setSelectedLLM, selectedLLM } = useSelectedLLM();
+  const { updateSettings, settings } = useAppSettings();
   const [open, setOpen] = useState<boolean>(false);
+  const selectedLLM = settings.llm;
 
   const llms: LLMItem[] = [
     {
@@ -69,16 +70,18 @@ export default function LLMSelector() {
   return (
     <Select
       onValueChange={(value) => {
-        setSelectedLLM(value as LLMSelection);
+        updateSettings({
+          llm: value as LLMSelection,
+        });
         toast("Successfully changed LLM", {
-          icon: <InformationCircleIcon className="h-6 w-6" />,
+          icon: llms.find((llm) => llm.value === value)?.icon,
           description: "LLM changed to " + value,
         });
       }}
       open={open}
       onOpenChange={setOpen}
     >
-      <SelectTrigger className="border-none px-0">
+      <SelectTrigger className="border-none px-0 shadow-none">
         <Button variant="list-item" className="justify-between">
           <div className="flex items-center gap-3">
             {llms.find((llm) => llm.value === selectedLLM)?.icon}{" "}
