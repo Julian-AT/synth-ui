@@ -12,7 +12,13 @@ import { useStreamableText } from "@/lib/hooks/use-streamable-text";
 import UserAvatar from "@/components/user-avatar";
 import Logo from "@/components/logo";
 
-export function MarkdownBlock({ content }: { content: string }) {
+export function MarkdownBlock({
+  content,
+  raw = false,
+}: {
+  content: string;
+  raw?: boolean;
+}) {
   return (
     <div className="flex-1 space-y-2">
       <MemoizedReactMarkdown
@@ -20,16 +26,31 @@ export function MarkdownBlock({ content }: { content: string }) {
         remarkPlugins={[remarkGfm, remarkMath]}
         components={{
           ul({ children }) {
-            return <ul className="mb-3 list-inside list-disc">{children}</ul>;
+            return (
+              <ul className="my-3 list-inside list-disc pl-3 marker:text-muted-foreground">
+                {children}
+              </ul>
+            );
           },
           ol({ children }) {
-            return <ol className="list-inside list-decimal">{children}</ol>;
+            return (
+              <ol className="my-3 list-inside list-decimal pl-3 marker:text-muted-foreground">
+                {children}
+              </ol>
+            );
           },
-          b({ children }) {
+          li({ children }) {
+            return <li className="mb-1">{children}</li>;
+          },
+          b({ children, node }) {
             return <b className="px-1 font-bold">{children}</b>;
           },
           p({ children }) {
-            return <p className="mb-3 leading-relaxed last:mb-0">{children}</p>;
+            return (
+              <p className="mb-3 text-base leading-loose last:mb-0">
+                {children}
+              </p>
+            );
           },
           h1({ children }) {
             return <h1 className="mb-3 text-2xl font-semibold">{children}</h1>;
@@ -44,7 +65,7 @@ export function MarkdownBlock({ content }: { content: string }) {
             return <h4 className="mb-3 text-base font-semibold">{children}</h4>;
           },
           h5({ children }) {
-            return <h5 className="mb-3text-sm font-semibold">{children}</h5>;
+            return <h5 className="mb-3 text-sm font-semibold">{children}</h5>;
           },
           h6({ children }) {
             return <h6 className="mb-3 text-xs font-semibold">{children}</h6>;
@@ -67,7 +88,7 @@ export function MarkdownBlock({ content }: { content: string }) {
                 <code
                   className={cn(
                     className,
-                    "rounded-md bg-secondary px-1 font-medium text-secondary-foreground shadow-sm",
+                    "my-3 rounded-md border bg-secondary px-1 text-sm font-medium text-secondary-foreground shadow-sm",
                   )}
                   {...props}
                 >
@@ -81,6 +102,7 @@ export function MarkdownBlock({ content }: { content: string }) {
                 key={Math.random()}
                 language={(match && match[1]) || ""}
                 value={String(children).replace(/\n$/, "")}
+                raw={raw}
                 {...props}
               />
             );
