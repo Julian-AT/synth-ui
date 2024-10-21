@@ -1,17 +1,27 @@
 import PromptForm from "@/components/prompt-form";
 import ExamplePrompts from "@/components/example-prompts";
 import Balancer from "react-wrap-balancer";
-import { EmptyScreenBadge } from "./empty-screen-badge";
-import UserPanelDialog from "./user-panel-dialog";
+import { EmptyScreenBadge } from "@/components/empty-screen-badge";
+import { toast } from "sonner";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { InformationCircleIcon } from "hugeicons-react";
 
 export default function EmptyScreen() {
   return (
     <div className="relative z-20 flex h-full w-full flex-col items-center justify-between gap-3 overflow-hidden md:justify-center">
       <div className="flex h-full flex-col items-center justify-center md:h-auto">
         <div className="z-20 flex flex-col items-center justify-center gap-3 py-5 md:py-0">
-          <UserPanelDialog>
-            <EmptyScreenBadge>Change Generation Quality (LLM)</EmptyScreenBadge>
-          </UserPanelDialog>
+          <EmptyScreenBadge
+            onClick={() =>
+              toast("Change Generation Quality", {
+                icon: <InformationCircleIcon className="h-6 w-6" />,
+                description:
+                  "Visit your profile at the bottom left to change generation quality",
+              })
+            }
+          >
+            Change Generation Quality (LLM)
+          </EmptyScreenBadge>
           <h1 className="text-center text-4xl font-medium">
             <Balancer>What can I help you build today?</Balancer>
           </h1>
