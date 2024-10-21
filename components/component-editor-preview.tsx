@@ -85,7 +85,7 @@ function ComponentEditorPreviewContent({
         className="mt-0 flex max-h-screen flex-1 overflow-hidden"
       >
         <ScrollArea className="flex-1">
-          <MarkdownBlock content={code} />
+          <MarkdownBlock content={code} raw />
           {/* <div ref={bottomRef} /> */}
         </ScrollArea>
       </TabsContent>

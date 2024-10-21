@@ -3,7 +3,7 @@
 
 "use client";
 
-import { FC, memo } from "react";
+import { FC, memo, useEffect } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   coldarkDark,
@@ -16,10 +16,15 @@ import {
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
 import { useTheme } from "next-themes";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Button } from "./button";
+import { Copy01Icon, Download01Icon, Download04Icon } from "hugeicons-react";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Props {
   language: string;
   value: string;
+  raw: boolean;
 }
 
 interface languageMap {
@@ -62,9 +67,18 @@ export const generateRandomString = (length: number, lowercase = false) => {
   return lowercase ? result.toLowerCase() : result;
 };
 
-const CodeBlock: FC<Props> = memo(({ language, value }) => {
+const CodeBlock: FC<Props> = memo(({ language, value, raw }) => {
   const { theme } = useTheme();
   const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 });
+
+  useEffect(() => {
+    if (isCopied) {
+      toast("Copied to clipboard", {
+        icon: <Copy01Icon className="h-5 w-5" />,
+        description: `Copied ${value.split("\n").length} lines.`,
+      });
+    }
+  }, [isCopied]);
 
   const downloadAsFile = () => {
     if (typeof window === "undefined") {
@@ -95,21 +109,50 @@ const CodeBlock: FC<Props> = memo(({ language, value }) => {
   };
 
   return (
-    <div className="codeblock w-full overflow-hidden font-sans">
+    <div
+      className={cn(
+        "codeblock w-full overflow-hidden font-sans",
+        !raw && "rounded-lg border",
+      )}
+    >
+      {!raw && (
+        <div className="flex items-center justify-between bg-secondary p-2">
+          <span className="text-xs text-muted-foreground">{language}</span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={downloadAsFile}
+              className="h-7 w-7 p-1"
+            >
+              <Download04Icon className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => copyToClipboard(value)}
+              className="h-7 w-7 p-1"
+            >
+              <Copy01Icon className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      )}
       <SyntaxHighlighter
         language={language}
         style={theme === "dark" ? coldarkDark : oneLight}
         PreTag="div"
-        showLineNumbers
+        // showLineNumbers
         customStyle={{
           margin: 0,
           overflow: "hidden",
           background: "transparent",
-          padding: "0rem 3rem 1rem 0rem",
+          padding: raw ? "0rem 3rem 1rem 0rem" : "1rem 3rem 1rem 1rem",
         }}
         lineNumberStyle={{
           userSelect: "none",
         }}
+        showLineNumbers={raw}
         codeTagProps={{
           style: {
             fontSize: "0.9rem",
