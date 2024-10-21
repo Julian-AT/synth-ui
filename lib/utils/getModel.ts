@@ -36,8 +36,6 @@ export function getModel(llmSelection?: LLMSelection): LanguageModel {
       const openaiApiKey = process.env.OPENAI_API_KEY;
       let openaiApiModel = llmSelection?.toString() || "gpt-4o-mini";
 
-      console.log("openaikey", openaiApiKey);
-
       if (!openaiApiKey) {
         throw new Error("Missing environment variable OPENAI_API_KEY");
       }
