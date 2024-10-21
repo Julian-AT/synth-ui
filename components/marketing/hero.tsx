@@ -9,10 +9,14 @@ import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { ArrowRight02Icon, GithubIcon } from "hugeicons-react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useTheme } from "next-themes";
+import { Skeleton } from "../ui/skeleton";
+import PulsatingButton from "../ui/pulsating-button";
 
 export const Hero = () => {
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
@@ -119,13 +123,26 @@ export const Hero = () => {
               <DialogTrigger>
                 <>
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-full scale-[1.1] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black" />
-                  <Image
-                    src="/header.png"
-                    alt="header"
-                    width={1920}
-                    height={1080}
-                    className="rounded-[20px] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black"
-                  />
+                  <Suspense
+                    fallback={
+                      <Skeleton className="h-full w-full rounded-[20px]" />
+                    }
+                  >
+                    <Image
+                      src={
+                        theme === "dark"
+                          ? "/assets/content/header_dark.png"
+                          : "/assets/content/header_light.png"
+                      }
+                      priority
+                      loading="eager"
+                      unoptimized
+                      alt="header"
+                      width={1920}
+                      height={1080}
+                      className="rounded-[28px] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black"
+                    />
+                  </Suspense>
                   <motion.div
                     initial={{
                       y: 40,
@@ -141,12 +158,12 @@ export const Hero = () => {
                       delay: 0.1,
                     }}
                   >
-                    <Button
-                      className="absolute bottom-24 left-0 right-0 mx-auto h-fit w-fit border border-border bg-background"
-                      variant="simple"
+                    <PulsatingButton
+                      className="absolute bottom-0 left-0 right-0 mx-auto h-fit w-fit rounded-xl border border-border bg-background text-secondary-foreground dark:bg-background dark:text-secondary-foreground md:bottom-24"
+                      pulseColor={theme === "dark" ? "#272727" : "#efefef"}
                     >
                       <span>Watch Video - 00:28</span>
-                    </Button>
+                    </PulsatingButton>
                   </motion.div>
                 </>
               </DialogTrigger>

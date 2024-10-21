@@ -58,12 +58,12 @@ export const SkeletonOne = () => {
         <div className="r z-20 mx-auto h-[250px] w-[250px] flex-shrink-0 rounded-[32px] border border-neutral-200 bg-neutral-100 p-2 transition duration-200 group-hover:scale-[1.02] dark:border-neutral-700 dark:bg-neutral-800 md:h-[300px] md:w-[300px]">
           <div className="h-full flex-shrink-0 rounded-[24px] border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-background">
             <Card
-              className="max-w-xs border-none shadow-none"
+              className="max-w-xs rounded-[32px] border-none shadow-none"
               x-chunk="charts-01-chunk-2"
             >
               <CardHeader>
                 <CardTitle>Productivity</CardTitle>
-                <CardDescription>
+                <CardDescription className="hidden md:block">
                   Approximate number of lines of code written within a month
                 </CardDescription>
               </CardHeader>
