@@ -22,6 +22,7 @@ import ErrorCard from "@/components/error-card";
 import { componentSummarizer } from "@/lib/ai/agents/component-summarizer";
 import { ComponentCardProps } from "@/components/component-card";
 import { AI } from "@/lib/ai/core";
+import { UILibrary } from "@/lib/types";
 
 export async function workflow(
   uiState: {
@@ -32,6 +33,7 @@ export async function workflow(
   aiState: ReturnType<typeof getMutableAIState<typeof AI>>,
   messages: CoreMessage[],
   skip: boolean,
+  uiLibrary: UILibrary,
   messageId?: string,
 ) {
   const { uiStream, isComponentCard } = uiState;
@@ -73,11 +75,16 @@ export async function workflow(
     }
 
     if (action.object.next === "generate_component") {
-      const abstract = await componentAbstract(uiStream, messages, true);
+      const abstract = await componentAbstract(
+        uiStream,
+        messages,
+        uiLibrary,
+        true,
+      );
 
       uiStream.append(<ComponentCardSkeleton />);
 
-      const specification = await componentSpecification(messages);
+      const specification = await componentSpecification(messages, uiLibrary);
 
       const fileName = specification.fileName;
       const title = camelCaseToSpaces(specification.componentName);
@@ -96,7 +103,11 @@ export async function workflow(
         );
       }
 
-      const summary = await componentSummarizer(uiStream, component.response);
+      const summary = await componentSummarizer(
+        uiStream,
+        component.response,
+        uiLibrary,
+      );
 
       aiState.done({
         ...aiState.get(),
