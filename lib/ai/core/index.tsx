@@ -19,6 +19,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import { saveChat } from "@/lib/actions/chat";
 import ErrorCard from "@/components/error-card";
 import { workflow } from "@/lib/ai/core/workflow";
+import { generateTitle } from "@/lib/ai/agents/title-generator";
 
 const MAX_MESSAGES = 6;
 
@@ -145,8 +146,16 @@ export const AI = createAI<AIState, UIState>({
       const user = await currentUser();
 
       if (user) {
-        const { id, messages, createdAt, path, title } = state;
+        const { id, messages, createdAt, path } = state;
+        let { title } = state;
         const userId = user.id;
+
+        if (!title || title.trim().length === 0) {
+          title = await generateTitle(
+            messages.find((m) => m.role === "user")?.content ?? "",
+          );
+          console.log("generated new title", title);
+        }
 
         const chat: Chat = {
           id,
@@ -217,8 +226,6 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
 
                 const isComponentCard = createStreamableValue(false);
                 isComponentCard.done(true);
-
-                console.log(componentCard);
 
                 return {
                   id,

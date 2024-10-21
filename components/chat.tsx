@@ -24,7 +24,7 @@ interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Chat({ className, missingKeys }: ChatProps) {
   const [aiState] = useAIState<typeof AI>();
   const [messages] = useUIState<typeof AI>();
-  const { setChat, setChatName, prompt } = useAppState();
+  const { setChat, setIsGenerating, isGenerating } = useAppState();
   const { isPreviewOpen, activeMessageId, closePreview, setComponentCards } =
     useComponentPreview();
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -45,11 +45,6 @@ export function Chat({ className, missingKeys }: ChatProps) {
   useEffect(() => {
     if (messages.length === 1) {
       window.history.replaceState({}, "", `/chat/${aiState.id}`);
-
-      // generate title
-      const statelessPrompt = prompt;
-      console.log("statelessPrompt", statelessPrompt);
-      generateTitle(statelessPrompt).then(setChatName);
     }
   }, [messages, aiState.id]);
 
@@ -78,6 +73,12 @@ export function Chat({ className, missingKeys }: ChatProps) {
 
   useEffect(() => {
     setChat(aiState);
+    console.log("aiState change", aiState);
+
+    const lastMessage = aiState.messages.at(-1);
+    if (lastMessage?.type === "inquiry" || lastMessage?.type === "follow_up") {
+      setIsGenerating(false);
+    }
   }, [aiState]);
 
   if (!isMounted) {
@@ -98,13 +99,14 @@ export function Chat({ className, missingKeys }: ChatProps) {
       {messages.length ? (
         <div className="relative flex h-screen max-h-screen flex-col overflow-hidden">
           <ChatHeader />
+          {isGenerating ? "Generating" : "Not Generating"}
           <div className="flex flex-1 flex-col overflow-auto">
             <ScrollArea className="h-full w-full overflow-auto pb-32">
               <ChatList messages={messages} isShared={false} />
             </ScrollArea>
             <div className="h-px w-full" ref={visibilityRef} />
           </div>
-          <PromptForm className="absolute bottom-5 left-0 right-0 mx-auto max-h-fit max-w-3xl" />
+          <PromptForm className="absolute bottom-5 left-0 right-0 mx-auto max-h-fit w-[95%] max-w-3xl" />
         </div>
       ) : (
         <div className="relative flex h-full items-center justify-center">
