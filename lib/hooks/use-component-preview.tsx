@@ -75,8 +75,6 @@ export function ComponentPreviewProvider({
 
   const togglePreview = useCallback(
     (messageId: string, code: string, title: string, fileName: string) => {
-      console.log("togglePreview", messageId, code, title, fileName);
-
       setState((prevState) => ({
         ...prevState,
         isOpen: prevState.messageId !== messageId || !prevState.isOpen,
@@ -95,8 +93,6 @@ export function ComponentPreviewProvider({
   }, []);
 
   const closePreview = useCallback(() => {
-    console.log("closing preview");
-
     setState((prevState) => ({ ...prevState, isOpen: false, messageId: null }));
   }, []);
 
