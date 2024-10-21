@@ -12,15 +12,18 @@ import { cn } from "@/lib/utils";
 const EXAMPLE_PROMPTS: ExamplePrompt[] = [
   {
     label: "A Pricing Section",
-    prompt: "Generate a pricing section",
+    prompt:
+      "Design a professional pricing section for a SaaS platform. Include three tiered plan cards, a monthly/yearly toggle (yearly at 10x monthly rate), and ensure each plan features a title, price, concise description, feature list, and call-to-action button.",
   },
   {
     label: "An Ecommerce Dashboard",
-    prompt: "Create a dashboard for an e-commerce website",
+    prompt:
+      "Create a comprehensive e-commerce dashboard. Include key metrics like total sales, average order value, and conversion rate. Design widgets for recent orders, top-selling products, and customer demographics. Add a customizable calendar selector widget.",
   },
   {
     label: "A Hero Section",
-    prompt: "Create a hero section for a website called 'Synth UI'",
+    prompt:
+      "Design an engaging hero section for 'Synth UI' website. Include a catchy headline that highlights the product's unique value proposition, a subheadline explaining key benefits, and a prominent call-to-action button. ",
   },
 ];
 
