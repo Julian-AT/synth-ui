@@ -20,7 +20,7 @@ export default function EmptyScreen() {
               })
             }
           >
-            Change Generation Quality (LLM)
+            Multiple LLMs & UI Library Support
           </EmptyScreenBadge>
           <h1 className="text-center text-4xl font-medium">
             <Balancer>What can I help you build today?</Balancer>
