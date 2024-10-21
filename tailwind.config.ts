@@ -17,7 +17,8 @@ module.exports = {
   prefix: "",
   theme: {
     container: {
-      center: "true",
+      // eslint-disable-next-line tailwindcss/no-custom-classname
+      center: true,
       padding: "2rem",
       screens: {
         "2xl": "1400px",
