@@ -8,7 +8,7 @@ import {
 } from "ai/rsc";
 import React, { ReactNode } from "react";
 import { CoreMessage, generateId } from "ai";
-import { AIMessage, Chat } from "@/lib/types";
+import { AIMessage, Chat, UILibrary } from "@/lib/types";
 import {
   BotMessage,
   PlainMessage,
@@ -27,8 +27,11 @@ async function submitUserMessage(
   formData?: FormData,
   skip?: boolean,
   retryMessages?: AIMessage[],
+  _uiLibrary?: UILibrary,
 ) {
   "use server";
+
+  const uiLibrary = _uiLibrary ?? "shadcn";
 
   const aiState = getMutableAIState<typeof AI>();
   const uiStream = createStreamableUI();
@@ -86,6 +89,7 @@ async function submitUserMessage(
     aiState,
     messages,
     skip ?? false,
+    uiLibrary,
     id,
   );
 
