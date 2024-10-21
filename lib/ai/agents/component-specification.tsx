@@ -7,7 +7,7 @@ import { getModel } from "@/lib/utils/getModel";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
 import shadcnUIComponentsDump from "@/public/assets/content/external/components/shadcn/dump.json";
-import fs from "fs";
+// import fs from "fs";
 
 export async function componentSpecification(
   messages: CoreMessage[],
@@ -71,7 +71,7 @@ export async function componentSpecification(
       );
     }
 
-    fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
+    // fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
 
     return specification;
   } catch (error) {
