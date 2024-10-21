@@ -1,10 +1,20 @@
 import { z } from "zod";
 import { DeepPartial } from "ai";
 import shadcnUIComponentsDump from "@/public/assets/content/external/components/shadcn/dump.json";
+import nextUIComponentsDump from "@/public/assets/content/external/components/nextui/dump.json";
+import flowbiteComponentsDump from "@/public/assets/content/external/components/flowbite/dump.json";
 import lucideIconsDump from "@/public/assets/content/external/icons/lucide/dump.json";
+import { UILibrary } from "@/lib/types";
+import { getUILibraryComponents } from "@/lib/utils/getUILibraryComponents";
 
-const shadcnUIComponents = [...shadcnUIComponentsDump] as const;
 const lucideIcons = [...lucideIconsDump] as const;
+
+const uiLibraryName = "nextui";
+const uiLibrary = [
+  ...(uiLibraryName === "nextui"
+    ? nextUIComponentsDump
+    : shadcnUIComponentsDump),
+] as const;
 
 // Enum for common types
 const propTypes = z
@@ -90,43 +100,6 @@ const accessibilitySchema = z.object({
     ),
 });
 
-// Main schema for the component specification
-const uiLibraryImportSchema = z.object({
-  imports: z
-    .array(
-      z.object({
-        name: z
-          .enum(
-            shadcnUIComponents.map((component) => component.name) as [
-              string,
-              ...string[],
-            ],
-          )
-          .describe(
-            "The name of the UI component being imported from a library.",
-          ),
-        importStatement: z
-          .string()
-          .min(0)
-          .max(0)
-          .describe("Leave this field blank."),
-        exampleUsage: z
-          .string()
-          .min(0)
-          .max(0)
-          .describe("Leave this field blank."),
-        reason: z
-          .string()
-          .describe(
-            "A professional justification for importing this specific UI component.",
-          ),
-      }),
-    )
-    .describe(
-      "A list of UI components imported from a UI library for use in the component.",
-    ),
-});
-
 // Schema for icon library imports
 const iconLibraryImportSchema = z.object({
   iconLibrary: z
@@ -150,69 +123,113 @@ const iconLibraryImportSchema = z.object({
     .describe("A list of icons imported from an icon library."),
 });
 
-export const componentSpecificationSchema = z.object({
-  componentName: z
-    .string()
-    .describe(
-      "The official name of the component, formatted using CamelCase. e.g. 'ComponentName'",
-    ),
-  fileName: z
-    .string()
-    .describe(
-      "A fitting name to store the component file. e.g. 'component-name.tsx'",
-    ),
-  isClientComponent: z
-    .boolean()
-    .default(false)
-    .describe(
-      "Indicates if the component is a client component, which allows it to use React hooks and other client-side features.",
-    ),
-  props: z
-    .array(propSchema)
-    .describe(
-      "A list of properties (props) that the component accepts, with associated metadata.",
-    ),
-  uiLibraryImports: uiLibraryImportSchema
-    .optional()
-    .describe(
-      "Lists UI components sourced from a UI library that are utilized by the component. Make use of as much reusable components from the library as possible. Even if task doesnt specifically ask for it, try to use a button, input, card, etc. from the library.",
-    ),
+export function getComponentSpecificationSchema(uiLibrary: UILibrary) {
+  const uiLibraryComponents = [...getUILibraryComponents(uiLibrary)] as const;
 
-  iconLibraryImports: iconLibraryImportSchema
-    .optional()
-    .describe(
-      "Lists icons from an icon library that are utilized by the component.",
-    ),
+  // Main schema for the component specification
+  const uiLibraryImportSchema = z.object({
+    imports: z
+      .array(
+        z.object({
+          name: z
+            .enum(
+              uiLibraryComponents.map((component) => component.name) as [
+                string,
+                ...string[],
+              ],
+            )
+            .describe(
+              "The name of the UI component being imported from a library.",
+            ),
+          importStatement: z
+            .string()
+            .min(0)
+            .max(0)
+            .describe("Leave this field blank."),
+          exampleUsage: z
+            .string()
+            .min(0)
+            .max(0)
+            .describe("Leave this field blank."),
+          reason: z
+            .string()
+            .describe(
+              "A professional justification for importing this specific UI component.",
+            ),
+        }),
+      )
+      .describe(
+        "A list of UI components imported from a UI library for use in the component.",
+      ),
+  });
 
-  acceptsChildren: z
-    .boolean()
-    .default(false)
-    .describe(
-      "Indicates if the component accepts children elements within it.",
-    ),
+  return z.object({
+    componentName: z
+      .string()
+      .describe(
+        "The official name of the component, formatted using CamelCase. e.g. 'ComponentName'",
+      ),
+    fileName: z
+      .string()
+      .describe(
+        "A fitting name to store the component file. e.g. 'component-name.tsx'",
+      ),
+    isClientComponent: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Indicates if the component is a client component, which allows it to use React hooks and other client-side features.",
+      ),
+    props: z
+      .array(propSchema)
+      .describe(
+        "A list of properties (props) that the component accepts, with associated metadata.",
+      ),
+    uiLibraryImports: uiLibraryImportSchema
+      .optional()
+      .describe(
+        "Lists UI components sourced from a UI library that are utilized by the component. Make use of as much reusable components from the library as possible. Even if task doesnt specifically ask for it, try to use a button, input, card, etc. from the library.",
+      ),
 
-  childrenType: propTypes
-    .optional()
-    .describe(
-      "Defines the type of children accepted, such as text or ReactNode.",
-    ),
+    iconLibraryImports: iconLibraryImportSchema
+      .optional()
+      .describe(
+        "Lists icons from an icon library that are utilized by the component.",
+      ),
 
-  states: z
-    .array(stateSchema)
-    .describe(
-      "A list of state variables managed by the component, including their types and default values.",
-    ),
+    acceptsChildren: z
+      .boolean()
+      .default(false)
+      .describe(
+        "Indicates if the component accepts children elements within it.",
+      ),
 
-  accessibility: accessibilitySchema
-    .optional()
-    .describe(
-      "Specifies accessibility attributes and settings for the component, such as ARIA labels.",
-    ),
-});
+    childrenType: propTypes
+      .optional()
+      .describe(
+        "Defines the type of children accepted, such as text or ReactNode.",
+      ),
+
+    states: z
+      .array(stateSchema)
+      .describe(
+        "A list of state variables managed by the component, including their types and default values.",
+      ),
+
+    accessibility: accessibilitySchema
+      .optional()
+      .describe(
+        "Specifies accessibility attributes and settings for the component, such as ARIA labels.",
+      ),
+  });
+}
+
+const componentSpecificationSchemaFallback =
+  getComponentSpecificationSchema("shadcn");
 
 export type ComponentSpecificationSchema = z.infer<
-  typeof componentSpecificationSchema & {
-    importStatement: string;
+  typeof componentSpecificationSchemaFallback & {
+    uiLibraryImports: any;
   }
 >;
 
