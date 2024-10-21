@@ -18,6 +18,7 @@ import { UserMessage } from "@/components/chat-message";
 import { cn } from "@/lib/utils";
 import NotImplementedDialog from "@/components/not-implemented-dialog";
 import { useAppState } from "@/lib/hooks/use-app-state";
+import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 
 interface PromptFormProps extends React.HTMLAttributes<HTMLDivElement> {
   query?: string;
@@ -29,20 +30,25 @@ export default function PromptForm({ query, className }: PromptFormProps) {
   const [, setMessages] = useUIState<typeof AI>();
   const { submitUserMessage } = useActions();
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const isFirstRender = useRef(true);
   const { onKeyDown, formRef } = useEnterSubmit();
   const { setPrompt, isGenerating } = useAppState();
+  const { isPreviewOpen } = useComponentPreview();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  async function handleQuerySubmit(query: string, formData?: FormData) {
-    if (!query || query.trim().length === 0 || isGenerating) {
-      return;
+  useEffect(() => {
+    if (inputRef.current) {
+      // set the text content of the textarea to force reevaluation of height
+      inputRef.current.textContent = input;
     }
-    setInput("");
+  }, [isPreviewOpen]);
 
+  const handleQuerySubmit = async (query: string, formData?: FormData) => {
+    if (!query?.trim() || isGenerating) return;
+
+    setInput("");
     setMessages((currentMessages) => [
       ...currentMessages,
       {
@@ -51,7 +57,6 @@ export default function PromptForm({ query, className }: PromptFormProps) {
       },
     ]);
 
-    // Submit and get response message
     const data = formData || new FormData();
     if (!formData) {
       data.append("input", query);
@@ -59,7 +64,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
     setPrompt(query);
     const responseMessage = await submitUserMessage(data);
     setMessages((currentMessages) => [...currentMessages, responseMessage]);
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,12 +73,21 @@ export default function PromptForm({ query, className }: PromptFormProps) {
     await handleQuerySubmit(input, formData);
   };
 
+  const handleAttachmentClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    // TODO: Implement attachment logic
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
       ref={formRef}
       className={cn(
         "md:muted relative flex w-full grow flex-col gap-1 overflow-hidden border-t border-primary/15 bg-background px-2.5 py-2.5 shadow-sm md:rounded-xl md:border",
+        isPreviewOpen
+          ? "max-h-[100px] transition-all duration-200"
+          : "max-h-[300px] transition-all duration-200",
         className,
       )}
     >
@@ -88,8 +102,8 @@ export default function PromptForm({ query, className }: PromptFormProps) {
         autoComplete="off"
         autoCorrect="off"
         name="message"
-        rows={2}
-        maxRows={20}
+        rows={isPreviewOpen ? 1 : 2}
+        maxRows={isPreviewOpen ? 3 : 20}
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
@@ -101,10 +115,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
                 variant="outline"
                 size="icon"
                 className="rounded-xl bg-background p-1"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log("append file");
-                }}
+                onClick={handleAttachmentClick}
               >
                 {isMounted ? (
                   <NotImplementedDialog>
@@ -121,9 +132,9 @@ export default function PromptForm({ query, className }: PromptFormProps) {
         </div>
         <TooltipButton
           type="submit"
-          disabled={input === "" || isGenerating}
+          disabled={!input.trim() || isGenerating}
           className="rounded-xl border border-primary/15 pl-2 disabled:bg-muted disabled:text-secondary-foreground"
-          tooltip={"Send Message"}
+          tooltip="Send Message"
         >
           <ArrowUp02Icon fontWeight={400} height={20} />
           Send
