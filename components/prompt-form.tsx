@@ -8,12 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import {
-  ArrowDown01Icon,
-  ArrowUp02Icon,
-  Attachment01Icon,
-  SparklesIcon,
-} from "hugeicons-react";
+import { ArrowUp02Icon, Attachment01Icon } from "hugeicons-react";
 import { useEffect, useRef, useState } from "react";
 import { useActions, useUIState } from "ai/rsc";
 import { AI } from "@/lib/ai/core";
@@ -32,20 +27,21 @@ export default function PromptForm({ query, className }: PromptFormProps) {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
   const [, setMessages] = useUIState<typeof AI>();
-  const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const { submitUserMessage } = useActions();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isFirstRender = useRef(true);
   const { onKeyDown, formRef } = useEnterSubmit();
-  const { setPrompt } = useAppState();
+  const { setPrompt, isGenerating } = useAppState();
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   async function handleQuerySubmit(query: string, formData?: FormData) {
+    if (!query || query.trim().length === 0 || isGenerating) {
+      return;
+    }
     setInput("");
-    setIsGenerating(true);
 
     setMessages((currentMessages) => [
       ...currentMessages,
@@ -62,7 +58,6 @@ export default function PromptForm({ query, className }: PromptFormProps) {
     }
     setPrompt(query);
     const responseMessage = await submitUserMessage(data);
-    console.log("response", responseMessage);
     setMessages((currentMessages) => [...currentMessages, responseMessage]);
   }
 
@@ -72,22 +67,6 @@ export default function PromptForm({ query, className }: PromptFormProps) {
     formData.append("input", input);
     await handleQuerySubmit(input, formData);
   };
-
-  useEffect(() => {
-    if (isFirstRender.current && query && query.trim().length > 0) {
-      handleQuerySubmit(query);
-      isFirstRender.current = false;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  if (query && query.trim().length > 0) {
-    return null;
-  }
 
   return (
     <form
@@ -143,7 +122,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
         <TooltipButton
           type="submit"
           disabled={input === "" || isGenerating}
-          className="rounded-xl border border-primary/15 disabled:bg-muted disabled:text-secondary-foreground"
+          className="rounded-xl border border-primary/15 pl-2 disabled:bg-muted disabled:text-secondary-foreground"
           tooltip={"Send Message"}
         >
           <ArrowUp02Icon fontWeight={400} height={20} />
