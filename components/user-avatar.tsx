@@ -24,7 +24,10 @@ export default function UserAvatar({ className, ...props }: UserAvatarProps) {
     );
 
   return (
-    <Avatar className={cn("h-full w-full p-0", className)} {...props}>
+    <Avatar
+      className={cn("h-full w-full rounded-md p-0", className)}
+      {...props}
+    >
       <AvatarImage src={user.imageUrl} />
       <AvatarFallback className="flex items-center justify-center bg-background">
         <span className="sr-only">{user.emailAddresses[0].emailAddress}</span>
