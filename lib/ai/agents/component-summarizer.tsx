@@ -1,22 +1,25 @@
 import { createStreamableUI } from "ai/rsc";
-import { CoreMessage } from "ai";
 import { streamingAgent, StreamResponse } from "@/lib/ai/agents/streamingAgent";
-
-const SYSTEM_PROMPT = `You have written a React component. Its your job to summarize the component in a natural language in under 1500 characters, ensuring the summary flows naturally instead of following a rigid list. Use markdown for formatting. The summary should cover:
-
-- A brief overview of the component's purpose and functionality.
-- Implementation details, including React hooks, logic, and any event listeners used, in a smooth, flowing narrative.
-- A description of the styling approach, such as the use of CSS frameworks, transitions, and responsiveness.
-- You wrote the component so you know the best way to explain it. Write the summary from your perspective and explain why you wrote the component the way you did.
-- The summary should be written in a way that is easy to understand and follow, with a natural flow and a smooth narrative.
-
-Keep the summary concise, ensuring it doesn’t exceed the 1500 character limit, and format it clearly with markdown for readability using different headings.`;
+import { UILibrary } from "@/lib/types";
 
 export async function componentSummarizer(
   uiStream: ReturnType<typeof createStreamableUI>,
   code: string,
+  uiLibrary: UILibrary,
   update?: boolean,
 ): Promise<StreamResponse> {
+  const SYSTEM_PROMPT = `As the expert React component designer who created this component, provide a comprehensive code review and integration guide. Your response should:
+
+1. Summarize the component's purpose, key features, and functionality.
+2. Highlight the use of ${uiLibrary} and any other significant libraries or technologies.
+3. Provide a detailed code review, discussing architecture, best practices, and any notable implementations.
+4. Offer clear instructions on how to integrate this component into a NextJS/React project.
+5. Mention any potential optimizations or areas for future enhancement.
+
+Aim for a thorough analysis that showcases the component's strengths and provides valuable insights for developers integrating it into their projects.
+
+Note (only applies if the ui library is "shadcn"): The installation for shadcn is \`npx shadcn@latest init\` and installing specific components is \`npx shadcn@latest add [component(s)]\` `;
+
   return streamingAgent(
     uiStream,
     [

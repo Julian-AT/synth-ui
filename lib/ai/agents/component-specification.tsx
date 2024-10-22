@@ -1,28 +1,42 @@
 import {
-  componentSpecificationSchema,
   ComponentSpecificationSchema,
   PartialComponentSpecificationSchema,
+  getComponentSpecificationSchema,
 } from "@/lib/schema/component/specification";
 import { getModel } from "@/lib/utils/getModel";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
-import shadcnUIComponentsDump from "@/public/assets/content/external/components/shadcn/dump.json";
-// import fs from "fs";
+import fs from "fs";
+import { UILibrary } from "@/lib/types";
+import { getUILibraryComponents } from "@/lib/utils/getUILibraryComponents";
 
 export async function componentSpecification(
   messages: CoreMessage[],
+  uiLibrary: UILibrary,
 ): Promise<ComponentSpecificationSchema> {
   const objectStream =
     createStreamableValue<PartialComponentSpecificationSchema>();
 
   let finalComponentSpecification: PartialComponentSpecificationSchema = {};
+  const componentSpecificationSchema =
+    getComponentSpecificationSchema(uiLibrary);
 
   try {
     await streamObject({
       model: getModel(),
-      system: `As a professional, and experienced senior software engineer for NextJS/React, your primary objective is to create an outline for a new NextJS/React component for a web application.
-      For each user query, utilize the information provided to generate a detailed specification for the NextJS/React component.
-      Aim to directly address the user's question, augmenting your response with additional details and explanations where necessary.`,
+      system: `As an expert NextJS/React engineer, your task is to generate a highly detailed JSON schema for a new component. This schema will be used to create a production-ready component in a subsequent step. Your primary objectives are:
+
+1. Create an exhaustive and detailed specification, leaving no aspect of the component undefined.
+2. Maximize the use of components from the provided UI Library, even if not explicitly requested by the user.
+3. Make informed assumptions about necessary subcomponents to ensure a comprehensive and modular design.
+4. Prioritize code modularity and reusability by leveraging external components whenever possible.
+5. Include specifications for props, state management, event handlers, and any necessary hooks.
+6. Consider accessibility, responsiveness, and performance optimizations in your schema.
+7. Provide detailed styling information, including responsive design considerations.
+8. Specify error handling and fallback UI where appropriate.
+9. Include TypeScript type definitions for all props and major functions.
+
+Remember, the more detailed and comprehensive your schema, the better the resulting component will be. Don't hesitate to include components or features that weren't explicitly requested if they would enhance the overall functionality and user experience of the component.`,
       messages,
       schema: componentSpecificationSchema,
     })
@@ -41,12 +55,14 @@ export async function componentSpecification(
         objectStream.done();
       });
 
+    const uiLibraryComponents = getUILibraryComponents(uiLibrary);
+
     // fill in importStatement and exampleUsage
     const uiLibraryImports = (
       (finalComponentSpecification as ComponentSpecificationSchema)
         .uiLibraryImports?.imports || []
     ).map((uiLibraryImport) => {
-      const component = shadcnUIComponentsDump.find(
+      const component = uiLibraryComponents.find(
         (c) => c.name === uiLibraryImport.name,
       );
 
@@ -71,7 +87,7 @@ export async function componentSpecification(
       );
     }
 
-    // fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
+    fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
 
     return specification;
   } catch (error) {
