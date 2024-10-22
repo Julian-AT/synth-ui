@@ -6,9 +6,11 @@ import {
 import { getModel } from "@/lib/utils/getModel";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
-import fs from "fs";
 import { UILibrary } from "@/lib/types";
 import { getUILibraryComponents } from "@/lib/utils/getUILibraryComponents";
+
+// disabled for prod -> only local testing for logging specification
+// import fs from "fs";
 
 export async function componentSpecification(
   messages: CoreMessage[],
@@ -87,7 +89,8 @@ Remember, the more detailed and comprehensive your schema, the better the result
       );
     }
 
-    fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
+    // disable in prod
+    // fs.writeFileSync("knost.json", JSON.stringify(specification, null, 2));
 
     return specification;
   } catch (error) {
