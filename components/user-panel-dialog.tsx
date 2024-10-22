@@ -15,6 +15,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import LLMSelector from "@/components/llm-selector";
 import { UserRole } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
+import UILibrarySelector from "./ui-library-selector";
 
 interface UserPanelDialogProps extends React.ComponentPropsWithoutRef<"div"> {}
 
@@ -69,10 +70,14 @@ export default function UserPanelDialog({ children }: UserPanelDialogProps) {
           </Link>
           <ModeToggle>Toggle Theme</ModeToggle>
           <Separator className="my-3" />
-          {/* <span className="px-4 text-xs font-medium uppercase text-muted-foreground">
+          <span className="px-4 text-xs font-medium uppercase text-muted-foreground">
             LLM Configuration
-          </span> */}
+          </span>
           <LLMSelector />
+          <span className="px-4 text-xs font-medium uppercase text-muted-foreground">
+            UI Library
+          </span>
+          <UILibrarySelector />
         </div>
         <Separator />
         <div className="flex flex-col gap-2">
