@@ -7,13 +7,14 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
 import Image from "next/image";
+import { UILibrary } from "@/lib/types";
+import { useTheme } from "next-themes";
 
 interface UILibraryItem {
   image: string;
@@ -24,8 +25,9 @@ interface UILibraryItem {
 
 export default function UILibrarySelector() {
   const { updateSettings, settings } = useAppSettings();
+  const { theme } = useTheme();
   const [open, setOpen] = useState<boolean>(false);
-  const selectedUILibrary = settings.uiLibrary;
+  const selectedUILibrary = settings.uiLibrary as UILibrary;
 
   const uiLibraries: UILibraryItem[] = [
     {
@@ -50,7 +52,7 @@ export default function UILibrarySelector() {
 
   return (
     <Select
-      onValueChange={(value) => {
+      onValueChange={(value: UILibrary) => {
         updateSettings({
           uiLibrary: value,
         });
@@ -59,6 +61,7 @@ export default function UILibrarySelector() {
             <Image
               src={uiLibraries.find((lib) => lib.value === value)?.image || ""}
               alt={selectedUILibrary}
+              className={theme === "dark" && value === "shadcn" ? "invert" : ""}
               width={64}
               height={64}
             />
@@ -76,6 +79,11 @@ export default function UILibrarySelector() {
               src={
                 uiLibraries.find((lib) => lib.value === selectedUILibrary)
                   ?.image || ""
+              }
+              className={
+                theme === "dark" && selectedUILibrary === "shadcn"
+                  ? "invert"
+                  : ""
               }
               alt={selectedUILibrary}
               width={16}
@@ -99,7 +107,15 @@ export default function UILibrarySelector() {
             key={lib.value}
           >
             <div className="flex items-center gap-3 p-1 pr-5">
-              <Image src={lib.image} alt={lib.name} width={24} height={24} />
+              <Image
+                src={lib.image}
+                alt={lib.name}
+                width={24}
+                height={24}
+                className={
+                  theme === "dark" && lib.value === "shadcn" ? "invert" : ""
+                }
+              />
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{lib.name}</span>
                 <span className="text-xs text-muted-foreground">
