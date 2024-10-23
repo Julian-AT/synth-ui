@@ -14,6 +14,7 @@ export interface ComponentCardProps {
   icon?: React.ReactNode;
   code: string | StreamableValue<string>;
   messageId: string;
+  iteration: number;
 }
 
 export default function ComponentCard({
@@ -22,6 +23,7 @@ export default function ComponentCard({
   icon = <ReactIcon />,
   code,
   messageId,
+  iteration,
 }: ComponentCardProps) {
   const {
     isPreviewOpen,
@@ -71,13 +73,18 @@ export default function ComponentCard({
       <Button
         variant={"outline"}
         className={cn(
-          "my-3 h-[55px] max-h-full w-full justify-start gap-3 rounded-lg bg-background p-1.5 hover:bg-secondary/50 md:w-[400px]",
+          "relative my-3 h-[55px] max-h-full w-full justify-start gap-3 rounded-lg bg-background p-1.5 hover:bg-secondary/50 md:w-[400px]",
           isPreviewOpen &&
             activeMessageId === messageId &&
             "ring-1 ring-primary/15",
         )}
         onClick={handleClick}
       >
+        {iteration && (
+          <div className="absolute right-1 top-1 rounded-md border bg-secondary px-1">
+            v{iteration}
+          </div>
+        )}
         <div className="flex h-full items-center justify-center rounded-sm bg-secondary p-2 text-muted-foreground">
           {icon}
         </div>

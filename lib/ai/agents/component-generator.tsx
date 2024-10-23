@@ -26,6 +26,7 @@ export async function componentGenerator(
       fileName={specification.fileName}
       title={camelCaseToSpaces(specification.componentName)}
       icon={<ReactIcon />}
+      iteration={1}
     />
   );
 

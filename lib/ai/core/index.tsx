@@ -82,6 +82,7 @@ async function submitUserMessage(
       isComponentCard,
     },
     aiState,
+    content,
     messages,
     false, // TODO: implement skip logic
     uiLibrary,
@@ -220,6 +221,7 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
             const toolOutput = JSON.parse(content);
             switch (type) {
               case "component_card":
+              case "component_iteration":
                 const code = createStreamableValue();
                 code.done(toolOutput.result.code);
 
@@ -238,11 +240,6 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                     />
                   ),
                   isComponentCard: isComponentCard.value,
-                };
-              case "component_iteration":
-                return {
-                  id,
-                  display: <div>Component Iteration Placeholder</div>,
                 };
             }
           } catch (error: any) {

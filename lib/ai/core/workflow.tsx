@@ -10,19 +10,22 @@ import {
 } from "ai/rsc";
 import { z } from "zod";
 import {
-  componentAbstract,
-  componentSpecification,
-  inquire,
   taskManager,
+  inquire,
+  componentSpecification,
+  componentAbstract,
+  componentGenerator,
+  componentSummarizer,
+  componentIterationAbstract,
+  componentIterator,
+  componentIterationSummarizer,
 } from "@/lib/ai/agents";
 import { camelCaseToSpaces } from "@/lib/utils";
 import ComponentCardSkeleton from "@/components/component-card-skeleton";
-import { componentGenerator } from "@/lib/ai/agents/component-generator";
 import ErrorCard from "@/components/error-card";
-import { componentSummarizer } from "@/lib/ai/agents/component-summarizer";
 import { ComponentCardProps } from "@/components/component-card";
 import { AI } from "@/lib/ai/core";
-import { LLMSelection, UILibrary } from "@/lib/types";
+import { AIMessage, LLMSelection, UILibrary } from "@/lib/types";
 
 export async function workflow(
   uiState: {
@@ -31,6 +34,7 @@ export async function workflow(
     isComponentCard: ReturnType<typeof createStreamableValue<boolean>>;
   },
   aiState: ReturnType<typeof getMutableAIState<typeof AI>>,
+  query: string,
   messages: CoreMessage[],
   skip: boolean,
   uiLibrary: UILibrary,
@@ -121,12 +125,12 @@ export async function workflow(
             role: "assistant",
             type: "answer",
           },
-          //   {
-          //     id,
-          //     content: JSON.stringify(specification),
-          //     role: "tool",
-          //     type: "component_specification",
-          //   },
+          {
+            id,
+            content: JSON.stringify(specification),
+            role: "tool",
+            type: "component_specification",
+          },
           {
             id,
             role: "tool",
@@ -137,6 +141,7 @@ export async function workflow(
                 code: component.response,
                 fileName,
                 title,
+                iteration: 1,
               } as ComponentCardProps,
             }),
           },
@@ -149,7 +154,91 @@ export async function workflow(
         ],
       });
     } else if (action.object.next === "iterate_component") {
-      // Implement iteration logic here
+      const iterationAbstract = await componentIterationAbstract(
+        uiStream,
+        messages,
+        true,
+      );
+
+      uiStream.append(<ComponentCardSkeleton />);
+
+      const lastComponentCardRaw = aiState
+        .get()
+        .messages.find(
+          (message: AIMessage) => message.type === "component_card",
+        );
+
+      console.log(lastComponentCardRaw);
+
+      const lastComponentCardJSON = JSON.parse(lastComponentCardRaw.content);
+
+      const lastComponentCard =
+        lastComponentCardJSON.result as ComponentCardProps;
+
+      const code = lastComponentCard.code.toString();
+      const fileName = lastComponentCard.fileName ?? "untitled.tsx";
+      const title = lastComponentCard.title ?? "Untitled";
+      const messageId = lastComponentCard.messageId;
+      const iteration = lastComponentCard.iteration + 1;
+
+      const componentIteration = await componentIterator(
+        uiStream,
+        code,
+        query,
+        uiLibrary,
+        llm,
+        title,
+        fileName,
+        messageId,
+        iteration,
+      );
+
+      if (componentIteration.hasError) {
+        throw new Error(
+          "An error occured while generating the component. Please try again later!",
+        );
+      }
+
+      const iterationSummary = await componentIterationSummarizer(
+        uiStream,
+        code,
+        componentIteration.response,
+        uiLibrary,
+        true,
+      );
+
+      aiState.done({
+        ...aiState.get(),
+        messages: [
+          ...aiState.get().messages,
+          {
+            id,
+            content: iterationAbstract.response,
+            role: "assistant",
+            type: "answer",
+          },
+          {
+            id,
+            role: "assistant",
+            type: "component_iteration",
+            content: JSON.stringify({
+              result: {
+                messageId: id,
+                code: componentIteration.response,
+                fileName,
+                title,
+                iteration: iteration,
+              } as ComponentCardProps,
+            }),
+          },
+          {
+            id,
+            role: "assistant",
+            content: iterationSummary.response,
+            type: "follow_up",
+          },
+        ],
+      });
     }
   } catch (error: any) {
     console.error("Error in processEvents:", error);
