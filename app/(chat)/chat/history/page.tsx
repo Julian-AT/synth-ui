@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
+export const runtime = "edge";
+export const preferredRegion = "home";
+
 async function ChatHistoryContent() {
   const user = await currentUser();
 
