@@ -31,10 +31,14 @@ export function getModel(llmSelection?: LLMSelection): LanguageModel {
       return anthropic("claude-3-haiku-20240307") as LanguageModel;
     case "gpt-4o":
     case "gpt-4o-mini":
+    case "synth-ui-v1": // TODO: implement synth-ui-v1
     default:
       const openaiApiBase = process.env.OPENAI_API_BASE;
       const openaiApiKey = process.env.OPENAI_API_KEY;
-      let openaiApiModel = llmSelection?.toString() || "gpt-4o-mini";
+      let openaiApiModel =
+        llmSelection !== "synth-ui-v1"
+          ? llmSelection?.toString() || "gpt-4o-mini"
+          : "gpt-4o";
 
       if (!openaiApiKey) {
         throw new Error("Missing environment variable OPENAI_API_KEY");
