@@ -38,7 +38,7 @@ export default function ComponentCard({
   }, []);
 
   useEffect(() => {
-    if (isMounted) {
+    if (isMounted && !isPreviewOpen) {
       togglePreview(messageId, streamedCode, title, fileName);
     }
   }, [isMounted]);
