@@ -1,5 +1,4 @@
 import { Chat } from "@/components/chat";
-import ChatHeader from "@/components/chat-header";
 import { getChat, getMissingKeys } from "@/lib/actions/chat";
 import { AI, getUIStateFromAIState } from "@/lib/ai/core";
 import { currentUser } from "@clerk/nextjs/server";
