@@ -6,6 +6,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
+export const runtime = "edge";
+export const preferredRegion = "home";
+
 export interface ChatPageProps {
   params: {
     id: string;
