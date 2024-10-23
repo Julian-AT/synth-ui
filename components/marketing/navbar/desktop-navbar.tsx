@@ -97,9 +97,9 @@ export const DesktopNavbar = ({ navItems }: Props) => {
           Github
         </Button>
         <SignedIn>
-          <Button as={Link} href="/chat">
-            Dashboard
-          </Button>
+          <Link href="/chat" prefetch={true}>
+            <Button>Dashboard</Button>
+          </Link>
         </SignedIn>
         <SignedOut>
           <Button as={Link} href="/chat">
