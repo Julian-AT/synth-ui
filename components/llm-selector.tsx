@@ -38,7 +38,7 @@ export default function LLMSelector() {
   const llms: LLMItem[] = [
     {
       icon: <Logo className="h-6 w-6" />,
-      name: "Quality (SynthUI)",
+      name: "Quality (SynthUI) [Soon]",
       description: "SynthUI custom model (Experimental)",
       suffix: "(SynthUI/synth-ui-v1)",
       value: "synth-ui-v1",
@@ -69,6 +69,7 @@ export default function LLMSelector() {
 
   return (
     <Select
+      defaultValue={selectedLLM}
       onValueChange={(value) => {
         updateSettings({
           llm: value as LLMSelection,
@@ -101,6 +102,7 @@ export default function LLMSelector() {
             className="rounded-lg px-2 py-0.5"
             value={llm.value}
             key={llm.value}
+            disabled={llm.value === "synth-ui-v1"}
           >
             <div className="flex items-center gap-3 p-1 pr-5">
               {llm.icon}
