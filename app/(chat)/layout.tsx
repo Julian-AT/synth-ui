@@ -9,7 +9,7 @@ export default function ChatWrapperLayout({
   return (
     <div className="flex h-full max-h-screen overflow-hidden">
       <ResizablePanelGroup direction="horizontal">
-        <ResizablePanel minSize={33} defaultSize={100}>
+        <ResizablePanel minSize={35} defaultSize={100}>
           {children}
         </ResizablePanel>
         <ComponentPreviewPanel />

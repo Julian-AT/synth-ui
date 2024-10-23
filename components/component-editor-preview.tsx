@@ -1,6 +1,6 @@
 "use client";
 
-import { createRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert02Icon, BrowserIcon, CodeFolderIcon } from "hugeicons-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -56,9 +56,9 @@ function ComponentEditorPreviewContent({
   return (
     <Tabs
       defaultValue="code"
-      className="relative flex h-full flex-1 flex-col overflow-hidden"
+      className="relative flex h-12 flex-1 flex-col overflow-hidden"
     >
-      <TabsList className="h-full w-full justify-start rounded-none border-b bg-background">
+      <TabsList className="w-full justify-start rounded-none border-b bg-background">
         <TabsTrigger
           value="preview"
           className="rounded-b-none border-b-0 shadow-none data-[state=active]:border data-[state=active]:border-b-0 data-[state=active]:bg-background data-[state=active]:shadow-none"

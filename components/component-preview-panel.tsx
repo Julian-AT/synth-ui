@@ -36,7 +36,7 @@ export default function ComponentPreviewPanel() {
       <ResizableHandle className="h-full min-h-screen bg-secondary" />
       <ResizablePanel
         defaultSize={100}
-        minSize={33}
+        minSize={35}
         className="flex h-full max-h-screen flex-col overflow-hidden"
       >
         <ComponentEditorPreviewHeader title={previewTitle} />
@@ -46,7 +46,6 @@ export default function ComponentPreviewPanel() {
   ) : (
     <Drawer
       open={isPreviewOpen}
-      autoFocus
       onOpenChange={(o) => (!o ? closePreview() : null)}
     >
       <DrawerContent className="h-full max-h-[90%]">
