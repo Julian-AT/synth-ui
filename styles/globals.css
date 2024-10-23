@@ -81,6 +81,7 @@
 
 ::selection {
   @apply bg-teal-100 text-teal-700;
+  @apply dark:bg-teal-800/50 dark:text-teal-500;
 }
 
 @layer base {
