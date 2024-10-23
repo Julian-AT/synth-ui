@@ -60,7 +60,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: siteConfig.creator, url: "https://github.com/julian-at" }],
   creator: siteConfig.creator,
-  manifest: `${siteConfig.url}/site.webmanifest`,
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
