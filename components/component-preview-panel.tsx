@@ -6,9 +6,11 @@ import ComponentEditorPreview from "@/components/component-editor-preview";
 import { ResizableHandle, ResizablePanel } from "@/components/ui/resizable";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 export default function ComponentPreviewPanel() {
   const { isPreviewOpen, previewTitle, closePreview } = useComponentPreview();
+  const pathname = usePathname();
   const [width, setWidth] = useState<number>(
     typeof window !== "undefined" ? window.innerWidth : 0,
   );
@@ -29,7 +31,7 @@ export default function ComponentPreviewPanel() {
     setIsMounted(true);
   }, []);
 
-  if (!isPreviewOpen || !isMounted) return null;
+  if (!isPreviewOpen || !isMounted || pathname === "/chat/history") return null;
 
   return width >= 1280 ? (
     <>
