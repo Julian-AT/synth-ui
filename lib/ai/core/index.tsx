@@ -8,7 +8,7 @@ import {
 } from "ai/rsc";
 import React, { ReactNode } from "react";
 import { CoreMessage, generateId } from "ai";
-import { AIMessage, Chat, UILibrary } from "@/lib/types";
+import { AIMessage, Chat, LLMSelection, UILibrary } from "@/lib/types";
 import {
   BotMessage,
   PlainMessage,
@@ -25,20 +25,17 @@ const MAX_MESSAGES = 6;
 
 async function submitUserMessage(
   formData?: FormData,
-  skip?: boolean,
-  retryMessages?: AIMessage[],
-  _uiLibrary?: UILibrary,
+  uiLibrary: UILibrary = "shadcn",
+  llm: LLMSelection = "gpt-4o",
 ) {
   "use server";
-
-  const uiLibrary = _uiLibrary ?? "shadcn";
 
   const aiState = getMutableAIState<typeof AI>();
   const uiStream = createStreamableUI();
   const isGenerating = createStreamableValue(true);
   const isComponentCard = createStreamableValue(false);
 
-  const aiMessages = [...(retryMessages ?? aiState.get().messages)];
+  const aiMessages = [...aiState.get().messages];
   const messages = aiMessages
     .filter(
       (m) =>
@@ -55,9 +52,7 @@ async function submitUserMessage(
 
   messages.splice(0, Math.max(messages.length - MAX_MESSAGES, 0));
 
-  const content = skip
-    ? `{ "action": "skip" }`
-    : (formData?.get("input") as string);
+  const content = formData?.get("input") as string;
 
   if (content) {
     aiState.update({
@@ -88,8 +83,9 @@ async function submitUserMessage(
     },
     aiState,
     messages,
-    skip ?? false,
+    false, // TODO: implement skip logic
     uiLibrary,
+    llm,
     id,
   );
 

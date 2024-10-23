@@ -8,6 +8,7 @@ import { AI } from "@/lib/ai/core";
 import { generateId } from "ai";
 import { UserMessage } from "@/components/chat-message";
 import { cn } from "@/lib/utils";
+import { useAppSettings } from "@/lib/hooks/use-app-settings";
 
 const EXAMPLE_PROMPTS: ExamplePrompt[] = [
   {
@@ -32,7 +33,7 @@ interface ExamplePromptsProps extends React.HTMLAttributes<HTMLDivElement> {}
 export default function ExamplePrompts({ className }: ExamplePromptsProps) {
   const [, setMessages] = useUIState<typeof AI>();
   const { submitUserMessage } = useActions();
-
+  const { settings } = useAppSettings();
   return (
     <div className={cn("z-20 flex flex-col gap-3 sm:flex-row", className)}>
       {EXAMPLE_PROMPTS.map((p: ExamplePrompt, index: number) => (
@@ -53,7 +54,11 @@ export default function ExamplePrompts({ className }: ExamplePromptsProps) {
 
             const data = new FormData();
             data.append("input", p.prompt);
-            const responseMessage = await submitUserMessage(data);
+            const responseMessage = await submitUserMessage(
+              data,
+              settings.uiLibrary,
+              settings.llm,
+            );
             setMessages((currentMessages) => [
               ...currentMessages,
               responseMessage,

@@ -22,7 +22,7 @@ import ErrorCard from "@/components/error-card";
 import { componentSummarizer } from "@/lib/ai/agents/component-summarizer";
 import { ComponentCardProps } from "@/components/component-card";
 import { AI } from "@/lib/ai/core";
-import { UILibrary } from "@/lib/types";
+import { LLMSelection, UILibrary } from "@/lib/types";
 
 export async function workflow(
   uiState: {
@@ -34,6 +34,7 @@ export async function workflow(
   messages: CoreMessage[],
   skip: boolean,
   uiLibrary: UILibrary,
+  llm: LLMSelection,
   messageId?: string,
 ) {
   const { uiStream, isComponentCard } = uiState;
@@ -93,6 +94,7 @@ export async function workflow(
         specification,
         id,
         true,
+        llm,
       );
 
       isComponentCard.done(true);

@@ -6,12 +6,14 @@ import { camelCaseToSpaces } from "@/lib/utils";
 import { getModel } from "@/lib/utils/getModel";
 import ComponentCard from "@/components/component-card";
 import { ReactIcon } from "hugeicons-react";
+import { LLMSelection } from "@/lib/types";
 
 export async function componentGenerator(
   uiStream: ReturnType<typeof createStreamableUI>,
   specification: ComponentSpecificationSchema,
   messageId: string,
   update: boolean = false,
+  llm: LLMSelection,
 ): Promise<StreamResponse> {
   let fullResponse = "";
   let hasError = false;
@@ -35,9 +37,11 @@ export async function componentGenerator(
 
   // uiStream.update(<BotMessage content={streamableAnswer.value} />);
 
+  console.log("generating component with model", llm);
+
   try {
     await streamText({
-      model: getModel(),
+      model: getModel(llm),
       system: `You are an expert React and Next.js developer tasked with generating a production-ready component based on a provided JSON specification. Your goal is to create a fully functional, polished, and comprehensive component that exceeds expectations in terms of quality and completeness.
 
 Key Requirements:

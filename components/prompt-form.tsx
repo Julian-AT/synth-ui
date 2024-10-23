@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import NotImplementedDialog from "@/components/not-implemented-dialog";
 import { useAppState } from "@/lib/hooks/use-app-state";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
+import { useAppSettings } from "@/lib/hooks/use-app-settings";
 
 interface PromptFormProps extends React.HTMLAttributes<HTMLDivElement> {
   query?: string;
@@ -33,6 +34,7 @@ export default function PromptForm({ query, className }: PromptFormProps) {
   const { onKeyDown, formRef } = useEnterSubmit();
   const { setPrompt, isGenerating } = useAppState();
   const { isPreviewOpen } = useComponentPreview();
+  const { settings } = useAppSettings();
 
   useEffect(() => {
     setIsMounted(true);
@@ -62,7 +64,11 @@ export default function PromptForm({ query, className }: PromptFormProps) {
       data.append("input", query);
     }
     setPrompt(query);
-    const responseMessage = await submitUserMessage(data);
+    const responseMessage = await submitUserMessage(
+      data,
+      settings.uiLibrary,
+      settings.llm,
+    );
     setMessages((currentMessages) => [...currentMessages, responseMessage]);
   };
 
