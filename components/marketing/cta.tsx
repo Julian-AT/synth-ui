@@ -7,9 +7,10 @@ import { Link } from "next-view-transitions";
 export const CTA = () => {
   return (
     <section className="relative z-30 w-full overflow-hidden py-60">
-      <div className="bg-white dark:bg-black">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 w-full scale-[1.1] bg-gradient-to-t from-transparent via-white to-white dark:via-black/50 dark:to-black" />
+      <div className="bg-transparent">
         <div className="relative z-20 mx-auto w-full bg-gradient-to-br from-slate-800 to-gray-900 dark:from-neutral-900 sm:max-w-[40rem] sm:rounded-2xl md:max-w-[48rem] lg:max-w-[64rem] xl:max-w-[80rem]">
-          <div className="relative -mx-6 overflow-hidden px-6 sm:mx-0 sm:rounded-2xl md:px-8">
+          <div className="relative overflow-hidden bg-black px-6 sm:mx-0 sm:rounded-2xl md:px-8">
             <div
               className="bg-noise fade-vignette absolute inset-0 h-full w-full opacity-10 [mask-image:radial-gradient(#fff,transparent,75%)]"
               style={{

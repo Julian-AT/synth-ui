@@ -28,7 +28,7 @@ import {
 export const SkeletonOne = () => {
   return (
     <div className="relative flex h-full gap-10 p-8">
-      <div className="group mx-auto h-full w-full bg-white p-5 shadow-2xl dark:bg-neutral-900 md:w-[90%]">
+      <div className="group invisible mx-auto h-full w-full bg-white p-5 shadow-2xl dark:bg-neutral-900 md:w-[90%] lg:visible">
         <div className="flex h-full w-full flex-1 flex-col space-y-2 opacity-20 dark:opacity-60">
           <UserMessage>
             Hey! I want to make a landing page for a side project of mine
@@ -52,10 +52,11 @@ export const SkeletonOne = () => {
           <AIMessage>
             I&apos;ll generate a design for you. Please give me a moment.
           </AIMessage>
+          <UserMessage>Thanks!</UserMessage>
         </div>
       </div>
       <div className="absolute inset-0 flex flex-col gap-4">
-        <div className="r z-20 mx-auto h-[250px] w-[250px] flex-shrink-0 rounded-[32px] border border-neutral-200 bg-neutral-100 p-2 transition duration-200 group-hover:scale-[1.02] dark:border-neutral-700 dark:bg-neutral-800 md:h-[300px] md:w-[300px]">
+        <div className="r z-20 mx-auto h-[250px] w-3/4 flex-shrink-0 rounded-[32px] border border-neutral-200 bg-neutral-100 p-2 transition duration-200 group-hover:scale-[1.02] dark:border-neutral-700 dark:bg-neutral-800 md:h-[300px] md:w-[300px]">
           <div className="h-full flex-shrink-0 rounded-[24px] border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-background">
             <Card
               className="max-w-xs rounded-[32px] border-none shadow-none"
@@ -179,7 +180,7 @@ export const SkeletonOne = () => {
             </Card>
           </div>
         </div>
-        <div className="r z-20 mx-auto h-96 w-[250px] flex-shrink-0 rounded-[32px] border border-neutral-200 bg-neutral-100 p-2 transition duration-200 group-hover:scale-[1.02] dark:border-neutral-700 dark:bg-neutral-800 md:h-[300px] md:w-[300px]">
+        <div className="r z-20 mx-auto h-96 w-3/4 flex-shrink-0 rounded-[32px] border border-neutral-200 bg-neutral-100 p-2 transition duration-200 group-hover:scale-[1.02] dark:border-neutral-700 dark:bg-neutral-800 md:h-[300px] md:w-[300px]">
           <div className="h-full flex-shrink-0 rounded-[24px] border border-neutral-200 bg-white py-6 dark:border-neutral-700 dark:bg-background">
             <span className="flex flex-col items-center justify-center text-center text-muted-foreground">
               Time saved with

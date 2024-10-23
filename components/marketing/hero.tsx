@@ -116,13 +116,12 @@ export const Hero = () => {
         </Button>
       </motion.div>
       <div className="relative mt-20 rounded-[32px] border border-neutral-200 bg-neutral-100 p-4 dark:border-neutral-700 dark:bg-neutral-800">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-full scale-[1.1] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black" />
         <div className="relative rounded-[24px] border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-black">
           {isMounted && (
             <Dialog>
               <DialogTrigger>
                 <>
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-full scale-[1.1] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black" />
+                  <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-64 w-full scale-[1.1] bg-gradient-to-b from-transparent via-white to-white dark:via-transparent dark:to-transparent" />
                   <Suspense
                     fallback={
                       <Skeleton className="h-full w-full rounded-[20px]" />
@@ -140,7 +139,7 @@ export const Hero = () => {
                       alt="header"
                       width={1920}
                       height={1080}
-                      className="rounded-[28px] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black"
+                      className="-mb-3 rounded-[28px] bg-gradient-to-b from-transparent via-white to-white dark:via-black/50 dark:to-black"
                     />
                   </Suspense>
                   <motion.div
