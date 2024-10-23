@@ -87,8 +87,8 @@ export default function UILibrarySelector() {
                   : ""
               }
               alt={selectedUILibrary}
-              width={24}
-              height={24}
+              width={20}
+              height={20}
             />
             {uiLibraries.find((lib) => lib.value === selectedUILibrary)?.name}
           </div>
@@ -111,8 +111,8 @@ export default function UILibrarySelector() {
               <Image
                 src={lib.image}
                 alt={lib.name}
-                width={24}
-                height={24}
+                width={20}
+                height={20}
                 className={
                   theme === "dark" && lib.value === "shadcn" ? "invert" : ""
                 }
