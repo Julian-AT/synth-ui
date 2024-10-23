@@ -52,6 +52,7 @@ export default function UILibrarySelector() {
 
   return (
     <Select
+      defaultValue={selectedUILibrary}
       onValueChange={(value: UILibrary) => {
         updateSettings({
           uiLibrary: value,
@@ -86,8 +87,8 @@ export default function UILibrarySelector() {
                   : ""
               }
               alt={selectedUILibrary}
-              width={16}
-              height={16}
+              width={24}
+              height={24}
             />
             {uiLibraries.find((lib) => lib.value === selectedUILibrary)?.name}
           </div>
