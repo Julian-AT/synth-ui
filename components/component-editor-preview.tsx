@@ -2,10 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Alert02Icon, BrowserIcon, CodeFolderIcon } from "hugeicons-react";
+import {
+  Alert02Icon,
+  BrowserIcon,
+  CodeFolderIcon,
+  DocumentValidationIcon,
+} from "hugeicons-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 import { MarkdownBlock } from "@/components/chat-message";
+import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom";
 
 export default function ComponentEditorPreview() {
   const { previewCode, isPreviewOpen, activeMessageId, previewFileName } =
@@ -45,20 +51,15 @@ function ComponentEditorPreviewContent({
   code: string;
   title: string;
 }) {
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [code]);
+  const [messagesContainerRef, messagesEndRef] =
+    useScrollToBottom<HTMLDivElement>();
 
   return (
     <Tabs
       defaultValue="code"
       className="relative flex h-12 flex-1 flex-col overflow-hidden"
     >
-      <TabsList className="w-full justify-start rounded-none border-b bg-background">
+      <TabsList className="w-full justify-start rounded-none border-b bg-transparent pl-1">
         <TabsTrigger
           value="preview"
           className="rounded-b-none border-b-0 shadow-none data-[state=active]:border data-[state=active]:border-b-0 data-[state=active]:bg-background data-[state=active]:shadow-none"
@@ -84,9 +85,8 @@ function ComponentEditorPreviewContent({
         value="code"
         className="mt-0 flex max-h-screen flex-1 overflow-hidden"
       >
-        <ScrollArea className="flex-1">
+        <ScrollArea className="flex-1" ref={messagesContainerRef}>
           <MarkdownBlock content={code} raw />
-          {/* <div ref={bottomRef} /> */}
         </ScrollArea>
       </TabsContent>
     </Tabs>

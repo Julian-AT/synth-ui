@@ -15,8 +15,8 @@ import {
 
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
 import { useTheme } from "next-themes";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Button } from "./button";
+import { ScrollBar } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import { Copy01Icon, Download01Icon, Download04Icon } from "hugeicons-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";

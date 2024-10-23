@@ -15,7 +15,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import LLMSelector from "@/components/llm-selector";
 import { UserRole } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
-import UILibrarySelector from "./ui-library-selector";
+import UILibrarySelector from "@/components/ui-library-selector";
 
 interface UserPanelDialogProps extends React.ComponentPropsWithoutRef<"div"> {}
 

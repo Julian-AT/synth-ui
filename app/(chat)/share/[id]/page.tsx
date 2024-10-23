@@ -4,8 +4,8 @@ import { formatDate } from "@/lib/utils";
 import { getSharedChat } from "@/lib/actions/chat";
 import { ChatList } from "@/components/chat-list";
 import { AI, UIState, getUIStateFromAIState } from "@/lib/ai/core";
-import { Badge } from "@/components/ui/badge";
-import { clerkClient } from "@clerk/nextjs/server";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export const runtime = "edge";
 export const preferredRegion = "home";
@@ -37,11 +37,13 @@ export default async function SharePage({ params }: SharePageProps) {
 
   return (
     <>
-      <div className="max-h-screen min-h-screen space-y-6 overflow-hidden border-r">
+      <div className="flex max-h-screen min-h-screen flex-col space-y-6 overflow-hidden border-r">
         <div className="border-b bg-background px-4 py-4 md:px-6">
           <div className="mx-auto max-w-2xl">
             <div className="space-y-1 md:-mx-8">
-              <h1 className="text-2xl font-bold">{chat.title}</h1>
+              <h1 className="overflow-hidden truncate text-2xl font-bold">
+                {chat.title}
+              </h1>
               <div className="text-sm text-muted-foreground">
                 {formatDate(chat.createdAt)} · {chat.messages.length} messages
               </div>
@@ -49,11 +51,15 @@ export default async function SharePage({ params }: SharePageProps) {
           </div>
         </div>
         <AI initialAIState={chat} initialUIState={uiState}>
-          <ChatList messages={uiState} isShared={true} />
+          <div className="flex flex-1 flex-col overflow-auto">
+            <ScrollArea className="h-full w-full overflow-auto">
+              <ChatList messages={uiState} isShared={true} />
+            </ScrollArea>
+          </div>
         </AI>
-        {/* <Badge className="absolute bottom-2 left-2 border bg-secondary text-secondary-foreground"> */}
-        {/* Shared by {chat.userId} */}
-        {/* </Badge> */}
+        <div className="absolute bottom-2 left-2 text-secondary-foreground">
+          <ModeToggle />
+        </div>
       </div>
     </>
   );

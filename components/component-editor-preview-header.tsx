@@ -4,6 +4,7 @@ import { ArrowRightDoubleIcon, GitForkIcon } from "hugeicons-react";
 import { TooltipButton } from "@/components/tooltip-button";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 import NotImplementedDialog from "@/components/not-implemented-dialog";
+import { ChatShareDialog } from "@/components/chat-share-dialog";
 
 interface ComponentEditorPreviewHeaderProps {
   title: string;
@@ -40,11 +41,11 @@ export default function ComponentEditorPreviewHeader({
             <span>Fork</span>
           </TooltipButton>
         </NotImplementedDialog>
-        <NotImplementedDialog>
+        <ChatShareDialog>
           <TooltipButton variant="default" tooltip="Publish Component">
             <span>Publish</span>
           </TooltipButton>
-        </NotImplementedDialog>
+        </ChatShareDialog>
       </div>
     </header>
   );

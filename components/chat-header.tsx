@@ -15,7 +15,7 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { TooltipButton } from "@/components/tooltip-button";
 import { ChatShareDialog } from "@/components/chat-share-dialog";
-import { ChatDropdown } from "@/components/chat-dropdown";
+import { ChatPopover } from "@/components/chat-popover";
 import { useAppState } from "@/lib/hooks/use-app-state";
 import { usePathname } from "next/navigation";
 import ChatRenameDialog from "@/components/chat-rename-dialog";
@@ -51,7 +51,7 @@ export default function ChatHeader() {
               transition={{ duration: 0.3 }}
               key={chat.title}
             >
-              {chat.title}
+              {chat.title && chat.title !== "" ? chat.title : "Untitled Chat"}
             </motion.div>
           </ChatRenameDialog>
           <ChatShareDialog>
@@ -83,7 +83,7 @@ export default function ChatHeader() {
             <SentIcon />
           </TooltipButton>
         </ChatShareDialog>
-        <ChatDropdown />
+        <ChatPopover chatId={chat.id} />
       </div>
     </header>
   );
