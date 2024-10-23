@@ -56,7 +56,7 @@ export async function getChat(id: string, userId: string) {
   return chat;
 }
 
-export async function removeChat({ id, path }: { id: string; path: string }) {
+export async function removeChat({ id }: { id: string }) {
   const user = await currentUser();
 
   if (!user) {
@@ -77,8 +77,7 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
   await kv.del(`chat:${id}`);
   await kv.zrem(`user:chat:${user.id}`, `chat:${id}`);
 
-  revalidatePath("/");
-  return revalidatePath(path);
+  return { success: true };
 }
 
 export async function renameChat(id: string, name: string) {
