@@ -27,8 +27,7 @@ export function getModel(llmSelection?: LLMSelection): LanguageModel {
         apiKey: anthropicApiKey,
       });
 
-      // use haiku for now, will be enough for testing purposes
-      return anthropic("claude-3-haiku-20240307") as LanguageModel;
+      return anthropic("claude-3-5-sonnet-20240620") as LanguageModel;
     case "gpt-4o":
     case "gpt-4o-mini":
     case "synth-ui-v1": // TODO: implement synth-ui-v1
