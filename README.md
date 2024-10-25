@@ -85,6 +85,7 @@ We encourage contributions and feedback from the community to help improve Synth
   - [ ] Aceternity UI
 - [ ] Agent Language Support
 - [ ] Component Previews / Micro VMs (StackBlitz)
+- [ ] Image Attachments for Image-To-Code
 
 <div align="center">
     <img src="https://repobeats.axiom.co/api/embed/5ba8b7006d5e98e6d88e2ccc74acc06682277ef4.svg" alt="Repobeats analytics image" />
