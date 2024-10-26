@@ -33,23 +33,28 @@ export function getModel(llmSelection?: LLMSelection): LanguageModel {
     case "gpt-4o-mini":
     case "synth-ui-v1": // TODO: implement synth-ui-v1
     default:
-      const openaiApiBase = process.env.OPENAI_API_BASE;
-      const openaiApiKey = process.env.OPENAI_API_KEY;
-      let openaiApiModel =
-        llmSelection !== "synth-ui-v1"
-          ? llmSelection?.toString() || "gpt-4o-mini"
-          : "gpt-4o";
+      const openAIApiBase = process.env.OPENAI_API_BASE;
+      const openAIApiKey = process.env.OPENAI_API_KEY;
 
-      if (!openaiApiKey) {
+      let openAIModel = llmSelection?.toString() || "gpt-4o-mini";
+
+      if (
+        llmSelection === "synth-ui-v1" ||
+        llmSelection === "claude-3.5-sonnet"
+      ) {
+        openAIModel = "gpt-4o";
+      }
+
+      if (!openAIApiKey) {
         throw new Error("Missing environment variable OPENAI_API_KEY");
       }
 
       const openai = createOpenAI({
-        baseURL: openaiApiBase,
-        apiKey: openaiApiKey,
+        baseURL: openAIApiBase,
+        apiKey: openAIApiKey,
         organization: "", // optional
       });
 
-      return openai.chat(openaiApiModel);
+      return openai.chat(openAIModel);
   }
 }
