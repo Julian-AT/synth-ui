@@ -87,6 +87,7 @@ export default function UILibrarySelector() {
                   : ""
               }
               alt={selectedUILibrary}
+              priority
               width={20}
               height={20}
             />
