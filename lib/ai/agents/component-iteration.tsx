@@ -18,6 +18,7 @@ export async function componentIterator(
   fileName: string,
   messageId: string,
   iteration: number,
+  language: string,
 ): Promise<StreamResponse> {
   const SYSTEM_PROMPT = `You are an expert React component editor. Your task is to modify the given component based on the user's request. Follow these guidelines:
 
@@ -26,7 +27,9 @@ export async function componentIterator(
 3. Maintain the component's original structure and purpose while implementing the requested changes.
 4. Ensure the modified code adheres to best practices for React, TypeScript, and ${uiLibrary}.
 5. Provide clear comments explaining significant changes.
-7. Output only the modified component code, without any additional explanations or text.`;
+7. Output only the modified component code, without any additional explanations or text.
+
+Please make comments etc. in ${language}.`;
 
   const messages = [
     {

@@ -15,6 +15,7 @@ import { getUILibraryComponents } from "@/lib/utils/getUILibraryComponents";
 export async function componentSpecification(
   messages: CoreMessage[],
   uiLibrary: UILibrary,
+  language: string,
 ): Promise<ComponentSpecificationSchema> {
   const objectStream =
     createStreamableValue<PartialComponentSpecificationSchema>();
@@ -38,7 +39,9 @@ export async function componentSpecification(
 8. Specify error handling and fallback UI where appropriate.
 9. Include TypeScript type definitions for all props and major functions.
 
-Remember, the more detailed and comprehensive your schema, the better the resulting component will be. Don't hesitate to include components or features that weren't explicitly requested if they would enhance the overall functionality and user experience of the component.`,
+Remember, the more detailed and comprehensive your schema, the better the resulting component will be. Don't hesitate to include components or features that weren't explicitly requested if they would enhance the overall functionality and user experience of the component.
+
+Please respond in ${language}.`,
       messages,
       schema: componentSpecificationSchema,
     })

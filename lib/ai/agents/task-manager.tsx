@@ -2,7 +2,7 @@ import { CoreMessage, generateObject } from "ai";
 import { nextActionSchema } from "@/lib/schema/next-action";
 import { getModel } from "@/lib/utils/getModel";
 
-export async function taskManager(messages: CoreMessage[]) {
+export async function taskManager(messages: CoreMessage[], language: string) {
   try {
     const result = await generateObject({
       model: getModel(),
@@ -13,7 +13,10 @@ You have the following options to choose from:
 2. **"inquire"**: Use this option if you cannot reasonably generate a component with the information provided. It should be used when essential details are missing or theres no message provider whatsoever, and there is no feasible way to proceed without clarification.  
 3. **"iterate_component"**: Select this option when refining or improving a previously generated component based on user feedback.
 
-Make your choices thoughtfully to deliver the most valuable and efficient assistance possible.`,
+Make your choices thoughtfully to deliver the most valuable and efficient assistance possible.
+
+Please always respond in ${language}.
+`,
       messages,
       schema: nextActionSchema,
     });

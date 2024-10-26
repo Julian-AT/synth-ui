@@ -26,6 +26,7 @@ import ErrorCard from "@/components/error-card";
 import { ComponentCardProps } from "@/components/component-card";
 import { AI } from "@/lib/ai/core";
 import { AIMessage, LLMSelection, UILibrary } from "@/lib/types";
+import { languageIdentifier } from "../agents/language-identifier";
 
 export async function workflow(
   uiState: {
@@ -48,16 +49,27 @@ export async function workflow(
 
     uiStream.update(<SpinnerMessage />);
 
+    let languageObject: {
+      object: {
+        language: string;
+      };
+    } = { object: { language: "English" } };
+
+    languageObject = (await languageIdentifier(query)) ?? languageObject;
+    const language = languageObject.object.language;
+
+    console.log(language);
+
     let action: {
       object: {
         next: z.infer<typeof nextActionSchema>["next"];
       };
     } = { object: { next: "generate_component" } };
 
-    if (!skip) action = (await taskManager(messages)) ?? action;
+    if (!skip) action = (await taskManager(messages, language)) ?? action;
 
     if (action.object.next === "inquire") {
-      const inquiry = await inquire(uiStream, messages);
+      const inquiry = await inquire(uiStream, messages, language);
 
       if (inquiry.hasError) {
         throw new Error("An error occured while generating the component.");
@@ -84,12 +96,17 @@ export async function workflow(
         uiStream,
         messages,
         uiLibrary,
+        language,
         true,
       );
 
       uiStream.append(<ComponentCardSkeleton />);
 
-      const specification = await componentSpecification(messages, uiLibrary);
+      const specification = await componentSpecification(
+        messages,
+        uiLibrary,
+        language,
+      );
 
       const fileName = specification.fileName;
       const title = camelCaseToSpaces(specification.componentName);
@@ -99,6 +116,7 @@ export async function workflow(
         id,
         true,
         llm,
+        language,
       );
 
       isComponentCard.done(true);
@@ -113,6 +131,7 @@ export async function workflow(
         uiStream,
         component.response,
         uiLibrary,
+        language,
       );
 
       aiState.done({
@@ -157,6 +176,7 @@ export async function workflow(
       const iterationAbstract = await componentIterationAbstract(
         uiStream,
         messages,
+        language,
         true,
       );
 
@@ -191,6 +211,7 @@ export async function workflow(
         fileName,
         messageId,
         iteration,
+        language,
       );
 
       if (componentIteration.hasError) {
@@ -204,6 +225,7 @@ export async function workflow(
         code,
         componentIteration.response,
         uiLibrary,
+        language,
         true,
       );
 

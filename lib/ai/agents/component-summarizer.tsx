@@ -6,6 +6,7 @@ export async function componentSummarizer(
   uiStream: ReturnType<typeof createStreamableUI>,
   code: string,
   uiLibrary: UILibrary,
+  language: string,
   update?: boolean,
 ): Promise<StreamResponse> {
   const SYSTEM_PROMPT = `As the expert React component designer who created this component, provide a comprehensive code review and integration guide. Your response should:
@@ -18,7 +19,9 @@ export async function componentSummarizer(
 
 Aim for a thorough analysis that showcases the component's strengths and provides valuable insights for developers integrating it into their projects.
 
-Note (only applies if the ui library is "shadcn"): The installation for shadcn is \`npx shadcn@latest init\` and installing specific components is \`npx shadcn@latest add [component(s)]\` `;
+Note (only applies if the ui library is "shadcn"): The installation for shadcn is \`npx shadcn@latest init\` and installing specific components is \`npx shadcn@latest add [component(s)]\`
+
+Please respond in ${language}.`;
 
   return streamingAgent(
     uiStream,

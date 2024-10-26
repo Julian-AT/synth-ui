@@ -1,6 +1,6 @@
 import { LanguageModel } from "ai";
 import { LLMSelection } from "@/lib/types";
-import { createAnthropic } from "@ai-sdk/anthropic";
+import { anthropic, createAnthropic } from "@ai-sdk/anthropic";
 import { createOpenAI } from "@ai-sdk/openai";
 
 /**
@@ -14,20 +14,21 @@ export function getModel(llmSelection?: LLMSelection): LanguageModel {
     // case "synth-ui-v1":
     //   // TODO: implement synth-ui-v1
     //   throw new Error("synth-ui-v1 is not implemented");
+    // case "claude-3.5-sonnet":
+    //   const anthropicApiBase = process.env.ANTHROPIC_API_BASE;
+    //   const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+
+    //   if (!anthropicApiKey) {
+    //     throw new Error("Missing environment variable ANTHROPIC_API_KEY");
+    //   }
+
+    //   const anthropic = createAnthropic({
+    //     baseURL: anthropicApiBase,
+    //     apiKey: anthropicApiKey,
+    //   });
+
+    //   return anthropic("claude-3-5-sonnet-20240620");
     case "claude-3.5-sonnet":
-      const anthropicApiBase = process.env.ANTHROPIC_API_BASE;
-      const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
-
-      if (!anthropicApiKey) {
-        throw new Error("Missing environment variable ANTHROPIC_API_KEY");
-      }
-
-      const anthropic = createAnthropic({
-        baseURL: anthropicApiBase,
-        apiKey: anthropicApiKey,
-      });
-
-      return anthropic("claude-3-5-sonnet-20240620") as LanguageModel;
     case "gpt-4o":
     case "gpt-4o-mini":
     case "synth-ui-v1": // TODO: implement synth-ui-v1

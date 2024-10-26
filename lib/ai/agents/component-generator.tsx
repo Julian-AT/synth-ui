@@ -14,6 +14,7 @@ export async function componentGenerator(
   messageId: string,
   update: boolean = false,
   llm: LLMSelection,
+  language: string,
 ): Promise<StreamResponse> {
   let fullResponse = "";
   let hasError = false;
@@ -85,7 +86,9 @@ Output Instructions:
 - Do not include any explanations or comments outside of the code itself.
 - Ensure the code is properly formatted and indented for readability.
 
-Remember, the goal is to create a component that is as complete and production-ready as possible. Do not hesitate to expand on the specification where it makes sense to create a more robust and feature-rich component.`,
+Remember, the goal is to create a component that is as complete and production-ready as possible. Do not hesitate to expand on the specification where it makes sense to create a more robust and feature-rich component.
+
+Please write comments etc. in ${language}.`,
       messages: [
         {
           role: "user",

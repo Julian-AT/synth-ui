@@ -7,6 +7,7 @@ export async function componentIterationSummarizer(
   originalCode: string,
   updatedCode: string,
   uiLibrary: UILibrary,
+  language: string,
   update?: boolean,
 ): Promise<StreamResponse> {
   const SYSTEM_PROMPT = `As an expert React component designer, analyze the changes made to a component and provide a comprehensive summary. Your response should:
@@ -18,7 +19,9 @@ export async function componentIterationSummarizer(
 5. Discuss any improvements in code quality, performance, or best practices.
 6. Mention any potential further optimizations or areas for future enhancement.
 
-Provide a thorough analysis that clearly communicates the evolution of the component and the rationale behind each change.`;
+Provide a thorough analysis that clearly communicates the evolution of the component and the rationale behind each change.
+
+Please respond in ${language}.`;
 
   return streamingAgent(
     uiStream,
