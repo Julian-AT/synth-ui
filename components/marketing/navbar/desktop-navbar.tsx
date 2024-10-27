@@ -98,7 +98,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
         </Button>
         <SignedIn>
           <Link href="/chat" prefetch={true}>
-            <Button>Dashboard</Button>
+            <Button>Chat</Button>
           </Link>
         </SignedIn>
         <SignedOut>
