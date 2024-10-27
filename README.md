@@ -83,7 +83,7 @@ We encourage contributions and feedback from the community to help improve Synth
   - [x] NextUI
   - [ ] Magic UI
   - [ ] Aceternity UI
-- [ ] Agent Language Support
+- [x] Agent Language Support
 - [ ] Component Previews / Micro VMs (StackBlitz)
 - [ ] Image Attachments for Image-To-Code
 
