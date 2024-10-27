@@ -15,7 +15,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import debounce from "debounce";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Clock04Icon, MessageSearch01Icon } from "hugeicons-react";
 import Link from "next/link";
@@ -37,8 +36,14 @@ export default function ChatHistoryWidget() {
   const { chats, fetchChats } = useChatStore();
   const { user } = useUser();
 
+  const form = useForm<z.infer<typeof searchFormSchema>>({
+    resolver: zodResolver(searchFormSchema),
+    defaultValues: {
+      query: "",
+    },
+  });
+
   useEffect(() => {
-    setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 300);
     return () => clearTimeout(timer);
   }, [query]);
@@ -48,13 +53,6 @@ export default function ChatHistoryWidget() {
       setIsLoading(false);
     }
   }, [chats]);
-
-  const form = useForm<z.infer<typeof searchFormSchema>>({
-    resolver: zodResolver(searchFormSchema),
-    defaultValues: {
-      query: "",
-    },
-  });
 
   const filteredChats = useMemo(() => {
     if (!chats) return [];
@@ -78,32 +76,37 @@ export default function ChatHistoryWidget() {
     });
   }, [chats, query]);
 
-  const debouncedHandleSearchChange = useCallback(
+  const handleSearchChange = useCallback(
     (value: string) => {
-      const debouncedSetQuery = debounce((v: string) => setQuery(v), 300);
-      debouncedSetQuery(value);
+      setQuery(value);
+      setIsLoading(true);
     },
-    [setQuery],
+    [setQuery, setIsLoading],
   );
 
+  const handlePopoverOpen = useCallback(() => {
+    if (user && !chats) {
+      setIsLoading(true);
+      fetchChats(user.id);
+    }
+  }, [user, chats, fetchChats]);
+
   return (
-    <Popover
-      onOpenChange={(open) => {
-        if (open && user && !chats) {
-          setIsLoading(true);
-          fetchChats(user.id);
-        }
-      }}
-    >
+    <Popover onOpenChange={handlePopoverOpen}>
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Chat History"
+              className="aspect-square w-full"
+            >
               <Clock04Icon className="h-full w-full p-2" />
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
-        <TooltipContent side={"right"} className={"ml-4"}>
+        <TooltipContent side="right" className="ml-4">
           <p>Chat History</p>
         </TooltipContent>
       </Tooltip>
@@ -112,7 +115,7 @@ export default function ChatHistoryWidget() {
         className="mb-3 ml-5 mt-[calc(35%)] w-80 rounded-xl p-0 text-base"
       >
         <Form {...form}>
-          <form className="flex flex-col gap-2">
+          <form className="flex flex-col gap-2" role="search">
             <FormField
               control={form.control}
               name="query"
@@ -127,10 +130,14 @@ export default function ChatHistoryWidget() {
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
-                          debouncedHandleSearchChange(e.target.value);
+                          handleSearchChange(e.target.value);
                         }}
+                        aria-label="Search chats"
                       />
-                      <MessageSearch01Icon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 p-0.5 text-muted-foreground" />
+                      <MessageSearch01Icon
+                        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 p-0.5 text-muted-foreground"
+                        aria-hidden="true"
+                      />
                     </div>
                   </FormControl>
                   <Separator />
@@ -148,12 +155,20 @@ export default function ChatHistoryWidget() {
                 ))}
               </div>
             ) : filteredChats.length > 0 ? (
-              <div className="flex max-h-60 flex-col gap-0 overflow-x-hidden px-2">
+              <ul
+                className="flex max-h-60 flex-col gap-0 overflow-x-hidden px-2"
+                role="list"
+              >
                 {filteredChats.map((chat) => (
-                  <Link href={`/chat/${chat.id}`} key={chat.id}>
-                    <div className="rounded-lg p-2 hover:bg-muted">
+                  <li key={chat.id}>
+                    <Link
+                      href={`/chat/${chat.id}`}
+                      className="block rounded-lg p-2 hover:bg-muted"
+                    >
                       <h3 className="flex gap-0.5">
-                        <p className="truncate font-semibold">{chat.title}</p>
+                        <span className="truncate font-semibold">
+                          {chat.title}
+                        </span>
                         <ChatPublicBadge
                           className="p-0.5"
                           isPublic={chat.sharePath !== undefined}
@@ -169,14 +184,14 @@ export default function ChatHistoryWidget() {
                           .at(-1)
                           ?.content.toString() || "No description"}
                       </p>
-                    </div>
-                  </Link>
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
-              <div className="text-center text-sm text-muted-foreground">
+              <p className="text-center text-sm text-muted-foreground">
                 No chats found
-              </div>
+              </p>
             )}
             <Link
               href="/chat/history"
