@@ -27,20 +27,20 @@ export function MarkdownBlock({
         components={{
           ul({ children }) {
             return (
-              <ul className="my-3 list-inside list-disc pl-3 marker:text-muted-foreground">
+              <ul className="my-3 list-outside list-disc pl-6 marker:text-muted-foreground">
                 {children}
               </ul>
             );
           },
           ol({ children }) {
             return (
-              <ol className="my-3 list-inside list-decimal pl-3 marker:text-muted-foreground">
+              <ol className="my-3 list-outside list-decimal pl-3 marker:text-muted-foreground">
                 {children}
               </ol>
             );
           },
           li({ children }) {
-            return <li className="mb-1">{children}</li>;
+            return <li className="relative pl-1">{children}</li>;
           },
           b({ children, node }) {
             return <b className="px-1 font-bold">{children}</b>;
