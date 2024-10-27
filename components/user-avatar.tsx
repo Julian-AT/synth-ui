@@ -28,10 +28,10 @@ export default function UserAvatar({ className, ...props }: UserAvatarProps) {
 
   return (
     <Avatar
-      className={cn("h-full w-full rounded-md p-0", className)}
+      className={cn("h-full w-full rounded-lg p-0", className)}
       {...props}
     >
-      <AvatarImage src={user.imageUrl} />
+      <AvatarImage src={user.imageUrl} alt={user.id} />
       <AvatarFallback className="flex items-center justify-center rounded-lg bg-background">
         <FallBackUserAvatar />
       </AvatarFallback>
@@ -41,7 +41,7 @@ export default function UserAvatar({ className, ...props }: UserAvatarProps) {
 
 function FallBackUserAvatar() {
   return (
-    <div className="flex h-full w-full items-center justify-center rounded-md border bg-secondary p-0">
+    <div className="flex h-full w-full items-center justify-center rounded-lg border bg-secondary p-0">
       <UserIcon className="h-full w-full p-1" />
     </div>
   );
