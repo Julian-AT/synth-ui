@@ -1,21 +1,21 @@
 "use client";
 
-import Logo from "@/components/logo";
-import { Button } from "@/components/marketing/button";
-import { NavBarItem } from "@/components/marketing/navbar/navbar-item";
+import { useCallback, useState } from "react";
 import {
   useMotionValueEvent,
   useScroll,
   motion,
   AnimatePresence,
 } from "framer-motion";
-import { cn } from "@/lib/utils";
-import React, { useState } from "react";
-import { Link } from "next-view-transitions";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
+import Link from "next/link";
+import Logo from "@/components/logo";
+import { Button } from "@/components/marketing/button";
+import { NavBarItem } from "@/components/marketing/navbar/navbar-item";
 import { ModeToggle } from "@/components/mode-toggle";
 import { GithubIcon } from "hugeicons-react";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 export interface NavItem {
   icon?: React.ReactNode;
@@ -30,16 +30,13 @@ type Props = {
 
 export const DesktopNavbar = ({ navItems }: Props) => {
   const { scrollY } = useScroll();
-
   const [showBackground, setShowBackground] = useState<boolean>(false);
 
-  useMotionValueEvent(scrollY, "change", (value) => {
-    if (value > 100) {
-      setShowBackground(true);
-    } else {
-      setShowBackground(false);
-    }
-  });
+  const handleScroll = useCallback((value: number) => {
+    setShowBackground(value > 100);
+  }, []);
+
+  useMotionValueEvent(scrollY, "change", handleScroll);
 
   return (
     <div
@@ -51,12 +48,11 @@ export const DesktopNavbar = ({ navItems }: Props) => {
       <AnimatePresence>
         {showBackground && (
           <motion.div
-            key={String(showBackground)}
+            key="background"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{
-              duration: 1,
-            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             className="pointer-events-none absolute inset-0 h-full w-full rounded-full bg-neutral-100 [mask-image:linear-gradient(to_bottom,white,transparent,white)] dark:bg-neutral-800"
           />
         )}
@@ -66,12 +62,11 @@ export const DesktopNavbar = ({ navItems }: Props) => {
           <Logo className="h-6 w-6" />
           <span className="font-semibold">Synth UI</span>
         </div>
-        <div className="flex items-center gap-1">
+        <nav className="flex items-center gap-1">
           {navItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-1.5">
+            <div key={item.title} className="flex items-center gap-1.5">
               <NavBarItem
                 href={item.link}
-                key={item.title}
                 target={item.target}
                 className="flex items-center gap-1.5 px-3"
               >
@@ -83,7 +78,7 @@ export const DesktopNavbar = ({ navItems }: Props) => {
               )}
             </div>
           ))}
-        </div>
+        </nav>
       </div>
       <div className="flex items-center space-x-2">
         <ModeToggle />
@@ -97,12 +92,12 @@ export const DesktopNavbar = ({ navItems }: Props) => {
           Github
         </Button>
         <SignedIn>
-          <Link href="/chat" prefetch={true}>
+          <Link href="/chat" prefetch={false}>
             <Button>Chat</Button>
           </Link>
         </SignedIn>
         <SignedOut>
-          <Button as={Link} href="/chat">
+          <Button as={Link} href="/chat" prefetch={false}>
             Login
           </Button>
         </SignedOut>

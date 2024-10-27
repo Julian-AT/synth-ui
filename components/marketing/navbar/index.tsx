@@ -1,11 +1,29 @@
 "use client";
-import {
-  DesktopNavbar,
-  NavItem,
-} from "@/components/marketing/navbar/desktop-navbar";
-import { MobileNavbar } from "@/components/marketing/navbar/mobile-navbar";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Blockchain01Icon, MagicWand01Icon, TableIcon } from "hugeicons-react";
+import { NavItem } from "@/components/marketing/navbar/desktop-navbar";
+
+const DesktopNavbar = dynamic(
+  () =>
+    import("@/components/marketing/navbar/desktop-navbar").then(
+      (mod) => mod.DesktopNavbar,
+    ),
+  {
+    ssr: false,
+    loading: () => <div className="h-16" />, // Placeholder height
+  },
+);
+const MobileNavbar = dynamic(
+  () =>
+    import("@/components/marketing/navbar/mobile-navbar").then(
+      (mod) => mod.MobileNavbar,
+    ),
+  {
+    ssr: false,
+    loading: () => <div className="h-16" />, // Placeholder height
+  },
+);
 
 const navItems: NavItem[] = [
   {
@@ -36,16 +54,9 @@ const navItems: NavItem[] = [
 export function NavBar() {
   return (
     <motion.nav
-      initial={{
-        y: -80,
-      }}
-      animate={{
-        y: 0,
-      }}
-      transition={{
-        ease: [0.6, 0.05, 0.1, 0.9],
-        duration: 0.8,
-      }}
+      initial={{ y: -80 }}
+      animate={{ y: 0 }}
+      transition={{ ease: [0.6, 0.05, 0.1, 0.9], duration: 0.8 }}
       className="fixed inset-x-0 z-50 mx-auto w-full max-w-7xl lg:top-4"
     >
       <div className="hidden w-full lg:block">
