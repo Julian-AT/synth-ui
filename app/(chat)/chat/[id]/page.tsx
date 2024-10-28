@@ -23,7 +23,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const chat = await getChat(params.id, user.id);
+  const chat = await getChat(params.id);
 
   if (!chat || "error" in chat) {
     redirect("/chat");
@@ -48,7 +48,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
   }
 
   const userId = user.id;
-  const chat = await getChat(params.id, userId);
+  const chat = await getChat(params.id);
 
   if (!chat || "error" in chat) {
     redirect("/chat");

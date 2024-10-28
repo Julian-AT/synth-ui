@@ -38,10 +38,10 @@ export async function getChats(userId?: string | null) {
   }
 }
 
-export async function getChat(id: string, userId: string) {
+export async function getChat(id: string) {
   const user = await currentUser();
 
-  if (!user || userId !== user.id) {
+  if (!user) {
     return {
       error: "Unauthorized",
     };
@@ -49,14 +49,16 @@ export async function getChat(id: string, userId: string) {
 
   const chat = await kv.hgetall<Chat>(`chat:${id}`);
 
-  if (!chat || (userId && chat.userId !== userId)) {
-    return null;
+  if (!chat || chat.userId !== user.id) {
+    return {
+      error: "Unauthorized",
+    };
   }
 
   return chat;
 }
 
-export async function removeChat({ id }: { id: string }) {
+export async function removeChat(id: string) {
   const user = await currentUser();
 
   if (!user) {
