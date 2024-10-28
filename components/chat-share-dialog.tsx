@@ -21,10 +21,13 @@ import { shareChat, unshareChat } from "@/lib/actions/chat";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
 import { useAppState } from "@/lib/hooks/use-app-state";
+import { usePathname, useRouter } from "next/navigation";
 
 export function ChatShareDialog({ children }: { children: React.ReactNode }) {
   const { copyToClipboard, isCopied } = useCopyToClipboard({ timeout: 2000 });
   const { chat, setSharePath } = useAppState();
+  const router = useRouter();
+  const pathname = usePathname();
 
   if (!chat) {
     return null;
@@ -55,6 +58,10 @@ export function ChatShareDialog({ children }: { children: React.ReactNode }) {
 
         setSharePath(undefined);
         setIsLoading(false);
+
+        if (pathname === `/share/${id}`) {
+          router.push("/chat");
+        }
         return;
       }
     } catch (error: any) {
