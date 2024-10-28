@@ -1,0 +1,94 @@
+name: 🐛 Bug Report
+description: Report a bug or issue in Synth UI
+title: "[BUG] <title>"
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Bug Report for Synth UI
+        Thank you for taking the time to report this issue! Please provide detailed information to help us resolve it quickly.
+  - type: checkboxes
+    attributes:
+      label: 🔍 Prerequisites
+      description: Please ensure you have completed these checks before submitting a bug report.
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I am using the latest version of Synth UI
+          required: true
+  - type: checkboxes
+    attributes:
+      label: 📊 Environment Checks
+      description: Please verify the following if applicable
+      options:
+        - label: I have checked Vercel Runtime Logs for deployment issues
+          required: false
+        - label: I have verified this issue occurs in a production build
+          required: false
+  - type: textarea
+    attributes:
+      label: 🚨 Current Behavior
+      description: Describe the bug or issue you're experiencing with Synth UI components or AI features
+      placeholder: |
+        Example: The AI-powered form validation component crashes when...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🎯 Expected Behavior
+      description: Describe what you expected to happen
+      placeholder: |
+        Example: The form validation should provide real-time feedback without crashing...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📝 Steps To Reproduce
+      description: Provide detailed steps to reproduce this issue
+      placeholder: |
+        1. Create a new component using...
+        2. Configure the AI settings to...
+        3. Interact with the component by...
+        4. Observe the error...
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 🔧 Component Type
+      description: Select the type of component where the issue occurs
+      options:
+        - AI-powered Components
+        - UI Components
+        - Form Components
+        - Layout Components
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 💻 Environment
+      description: |
+        Please provide your environment details
+      value: |
+        - OS:
+        - Browser:
+        - Synth UI Version:
+        - Next.js Version:
+        - Node.js Version:
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📎 Additional Context
+      description: |
+        Add any other context about the problem here. You can attach:
+        - Screenshots
+        - Error logs
+        - Code snippets
+        - Reproduction repository link
+
+        Tip: You can click this area and drag files to attach them.
+    validations:
+      required: false

@@ -1,0 +1,45 @@
+name: ✨ Feature Request
+description: Propose a new feature for Synth UI
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Feature Request for Synth UI
+        Thank you for taking the time to propose a new feature! Please provide detailed information to help us understand and evaluate your request.
+  - type: textarea
+    attributes:
+      label: 🎯 Feature Description
+      description: Describe the feature you'd like to see in Synth UI. Include technical details about UI components, interactions, or AI-driven functionality.
+      placeholder: |
+        Example: Add a new component for AI-powered form validation that provides real-time feedback using the AI SDK...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 💡 Use Case
+      description: Explain how this feature would benefit developers using Synth UI for building AI-powered interfaces
+      placeholder: |
+        Example: This would help developers create more intuitive forms by providing immediate AI-driven validation feedback to users...
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 🔍 Feature Category
+      description: Select the category that best describes your feature request
+      options:
+        - UI Components
+        - AI Integration
+        - Developer Experience
+        - Performance
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 📝 Additional Context
+      description: |
+        Share any extra information, mockups, or examples that could help us better understand your feature request.
+      placeholder: |
+        Include links to similar implementations, screenshots, or technical considerations...
