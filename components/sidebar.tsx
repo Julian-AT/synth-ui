@@ -64,7 +64,7 @@ const SidebarButton = ({
         rel={external ? "noopener noreferrer" : undefined}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "p-2",
+          "aspect-square p-2",
           bordered && "border",
         )}
       >
@@ -82,7 +82,7 @@ export default function Sidebar() {
     <AceternitySidebar animate={false}>
       <SidebarBody className="flex h-screen flex-col justify-between p-3 md:items-center">
         <div className="flex w-full flex-col items-center gap-4">
-          <Logo className="h-10 w-10" />
+          <Logo className="aspect-square h-full w-full p-1" />
           <div className="flex w-full flex-col gap-2">
             <SidebarButton
               href="/chat"
