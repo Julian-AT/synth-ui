@@ -18,6 +18,7 @@ export type AIMessageType =
   | "skip"
   | "input"
   | "inquiry"
+  | "prompt_suggestions"
   | "tool"
   | "follow_up"
   | "end";
