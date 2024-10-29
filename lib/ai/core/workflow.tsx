@@ -12,6 +12,8 @@ import { z } from "zod";
 import {
   taskManager,
   inquire,
+  promptSuggestor,
+  languageIdentifier,
   componentSpecification,
   componentAbstract,
   componentGenerator,
@@ -26,7 +28,7 @@ import ErrorCard from "@/components/error-card";
 import { ComponentCardProps } from "@/components/component-card";
 import { AI } from "@/lib/ai/core";
 import { AIMessage, LLMSelection, UILibrary } from "@/lib/types";
-import { languageIdentifier } from "../agents/language-identifier";
+import DisclaimerBadge from "@/components/disclaimer-badge";
 
 export async function workflow(
   uiState: {
@@ -72,8 +74,22 @@ export async function workflow(
       const inquiry = await inquire(uiStream, messages, language);
 
       if (inquiry.hasError) {
-        throw new Error("An error occured while generating the component.");
+        throw new Error("An error occured while generating the inquiry");
       }
+
+      const promptSuggestions = await promptSuggestor(
+        uiStream,
+        query,
+        false,
+        llm,
+        language,
+      );
+
+      if (promptSuggestions.hasError) {
+        throw new Error("An error occured while generating related prompts");
+      }
+
+      console.log(promptSuggestions.response);
 
       aiState.done({
         ...aiState.get(),
@@ -84,6 +100,16 @@ export async function workflow(
             role: "assistant",
             content: inquiry.response,
             type: "inquiry",
+          },
+          {
+            id,
+            role: "tool",
+            content: JSON.stringify({
+              result: {
+                ...JSON.parse(promptSuggestions.response),
+              },
+            }),
+            type: "prompt_suggestions",
           },
         ],
       });
@@ -134,6 +160,11 @@ export async function workflow(
         language,
       );
 
+      const disclaimerContent = `${abstract.response}\n\n${component.response}\n\n${summary.response}`;
+      uiStream.append(
+        <DisclaimerBadge content={disclaimerContent} llm={llm} />,
+      );
+
       aiState.done({
         ...aiState.get(),
         messages: [
@@ -169,6 +200,17 @@ export async function workflow(
             role: "assistant",
             content: summary.response,
             type: "follow_up",
+          },
+          {
+            id,
+            role: "assistant",
+            content: JSON.stringify({
+              result: {
+                content: disclaimerContent,
+                llm,
+              },
+            }),
+            type: "end",
           },
         ],
       });
@@ -229,6 +271,11 @@ export async function workflow(
         true,
       );
 
+      const iterationDisclaimerContent = `${iterationAbstract.response}\n\n${componentIteration.response}\n\n${iterationSummary.response}`;
+      uiStream.append(
+        <DisclaimerBadge content={iterationDisclaimerContent} llm={llm} />,
+      );
+
       aiState.done({
         ...aiState.get(),
         messages: [
@@ -258,6 +305,14 @@ export async function workflow(
             role: "assistant",
             content: iterationSummary.response,
             type: "follow_up",
+          },
+          {
+            id,
+            role: "assistant",
+            content: JSON.stringify({
+              result: { content: iterationDisclaimerContent, llm },
+            }),
+            type: "end",
           },
         ],
       });

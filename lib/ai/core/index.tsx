@@ -20,6 +20,8 @@ import { saveChat } from "@/lib/actions/chat";
 import ErrorCard from "@/components/error-card";
 import { workflow } from "@/lib/ai/core/workflow";
 import { generateTitle } from "@/lib/ai/agents/title-generator";
+import PromptSuggestions from "@/components/prompt-suggestions";
+import DisclaimerBadge from "@/components/disclaimer-badge";
 
 const MAX_MESSAGES = 6;
 
@@ -43,7 +45,8 @@ async function submitUserMessage(
         m.type !== "end" &&
         m.type !== "component_card" &&
         m.type !== "component_specification" &&
-        m.type !== "component_iteration",
+        m.type !== "component_iteration" &&
+        m.type !== "prompt_suggestions",
     )
     .map((m) => {
       const { role, content } = m;
@@ -181,10 +184,10 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
   const messages = Array.isArray(aiState.messages) ? aiState.messages : [];
 
   return messages
-    .map((message) => {
+    .map((message, index) => {
       const { role, content, id, type } = message;
 
-      if (type === "end" || type === "component_specification") return null;
+      if (type === "component_specification") return null;
 
       switch (role) {
         case "user":
@@ -215,6 +218,12 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                 id,
                 display: <PlainMessage content={answer.value} indent />,
               };
+            case "end":
+              const result = JSON.parse(content);
+              return {
+                id,
+                display: <DisclaimerBadge {...result} />,
+              };
           }
         case "tool":
           try {
@@ -240,6 +249,19 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                     />
                   ),
                   isComponentCard: isComponentCard.value,
+                };
+              case "prompt_suggestions":
+                // only display prompt suggestions if its the last message
+                if (index !== messages.length - 1) return null;
+
+                const title = toolOutput.result.suggestionsTitle;
+                const prompts = toolOutput.result.suggestions;
+
+                return {
+                  id,
+                  display: (
+                    <PromptSuggestions title={title} prompts={prompts} />
+                  ),
                 };
             }
           } catch (error: any) {
