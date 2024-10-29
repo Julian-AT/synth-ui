@@ -10,7 +10,7 @@ import { UserMessage } from "@/components/chat-message";
 import { cn } from "@/lib/utils";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
 
-const EXAMPLE_PROMPTS: ExamplePrompt[] = [
+export const EXAMPLE_PROMPTS: ExamplePrompt[] = [
   {
     label: "A Pricing Section",
     prompt:

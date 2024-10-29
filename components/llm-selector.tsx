@@ -3,23 +3,49 @@
 import { LLMSelection } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
-import {
-  ArrowDown01Icon,
-  Forward02Icon,
-  InformationCircleIcon,
-  SparklesIcon,
-} from "hugeicons-react";
+import { ArrowDown01Icon, Forward02Icon, SparklesIcon } from "hugeicons-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
+
+export const llms: LLMItem[] = [
+  {
+    icon: <Logo className="h-6 w-6" />,
+    name: "Quality (SynthUI) [Soon]",
+    description: "SynthUI custom model (Experimental)",
+    suffix: "(SynthUI/synth-ui-v1)",
+    value: "synth-ui-v1",
+    highlighted: true,
+  },
+  {
+    icon: <Forward02Icon className="h-6 w-6 text-green-500" />,
+    name: "Speed (GPT-4o-mini)",
+    description: "High speed, but low accuracy",
+    suffix: "(OpenAI/GPT-4o-mini)",
+    value: "gpt-4o-mini",
+  },
+  {
+    icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
+    name: "Quality (GPT-4o)",
+    description: "High quality generation",
+    suffix: "(OpenAI/GPT-4o)",
+    value: "gpt-4o",
+  },
+  {
+    icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
+    name: "Quality (Claude)",
+    description: "High quality generation",
+    suffix: "(Anthropic/claude-3.5-sonnet)",
+    value: "claude-3.5-sonnet",
+  },
+];
 
 interface LLMItem {
   icon: React.ReactNode;
@@ -34,38 +60,6 @@ export default function LLMSelector() {
   const { updateSettings, settings } = useAppSettings();
   const [open, setOpen] = useState<boolean>(false);
   const selectedLLM = settings.llm;
-
-  const llms: LLMItem[] = [
-    {
-      icon: <Logo className="h-6 w-6" />,
-      name: "Quality (SynthUI) [Soon]",
-      description: "SynthUI custom model (Experimental)",
-      suffix: "(SynthUI/synth-ui-v1)",
-      value: "synth-ui-v1",
-      highlighted: true,
-    },
-    {
-      icon: <Forward02Icon className="h-6 w-6 text-green-500" />,
-      name: "Speed (GPT-4o-mini)",
-      description: "High speed, but low accuracy",
-      suffix: "(OpenAI/GPT-4o-mini)",
-      value: "gpt-4o-mini",
-    },
-    {
-      icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
-      name: "Quality (GPT-4o)",
-      description: "High quality generation",
-      suffix: "(OpenAI/GPT-4o)",
-      value: "gpt-4o",
-    },
-    {
-      icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
-      name: "Quality (Claude)",
-      description: "High quality generation",
-      suffix: "(Anthropic/claude-3.5-sonnet)",
-      value: "claude-3.5-sonnet",
-    },
-  ];
 
   return (
     <Select
