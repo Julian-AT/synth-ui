@@ -46,7 +46,7 @@ export function DeleteChatDialog({
 
     setIsLoading(true);
     try {
-      const result = await removeChat({ id: chatId });
+      const result = await removeChat(chatId);
       if (!result || "error" in result || !result.success) {
         throw new Error(result?.error ?? "Failed to delete chat");
       }
