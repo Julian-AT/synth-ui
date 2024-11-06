@@ -17,33 +17,39 @@ import { useAppSettings } from "@/lib/hooks/use-app-settings";
 
 export const llms: LLMItem[] = [
   {
-    icon: <Logo className="h-6 w-6" />,
-    name: "Quality (SynthUI) [Soon]",
-    description: "SynthUI custom model (Experimental)",
-    suffix: "(SynthUI/synth-ui-v1)",
-    value: "synth-ui-v1",
-    highlighted: true,
-  },
-  {
     icon: <Forward02Icon className="h-6 w-6 text-green-500" />,
-    name: "Speed (GPT-4o-mini)",
+    name: "Speed (OpenAI)",
     description: "High speed, but low accuracy",
     suffix: "(OpenAI/GPT-4o-mini)",
-    value: "gpt-4o-mini",
+    value: "openai:gpt-4o-mini",
+  },
+  {
+    icon: <Forward02Icon className="h-6 w-6 text-blue-500" />,
+    name: "Speed (Gemini Flash)",
+    description: "High quality generation with Mistral's Flagship Model",
+    suffix: "(Google/gemini-1.5-flash)",
+    value: "google:gemini-1.5-flash",
   },
   {
     icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
-    name: "Quality (GPT-4o)",
+    name: "Quality (OpenAI)",
     description: "High quality generation",
     suffix: "(OpenAI/GPT-4o)",
-    value: "gpt-4o",
+    value: "openai:gpt-4o",
   },
   {
-    icon: <SparklesIcon className="h-6 w-6 text-violet-700" />,
+    icon: <SparklesIcon className="h-6 w-6 text-orange-700" />,
     name: "Quality (Claude)",
-    description: "High quality generation",
+    description: "High quality generation with low latency",
     suffix: "(Anthropic/claude-3.5-sonnet)",
-    value: "claude-3.5-sonnet",
+    value: "anthropic:claude-3-5-sonnet-20241022",
+  },
+  {
+    icon: <SparklesIcon className="h-6 w-6 text-yellow-500" />,
+    name: "Quality (Mistral)",
+    description: "High quality generation with Mistral's Flagship Model",
+    suffix: "(Mistral/mistral-large-latest)",
+    value: "mistral:mistral-large-latest",
   },
 ];
 
@@ -63,14 +69,16 @@ export default function LLMSelector() {
 
   return (
     <Select
-      defaultValue={selectedLLM}
+      defaultValue={
+        llms.find((llm) => llm.value === selectedLLM)?.value ?? "openai:gpt-4o"
+      }
       onValueChange={(value) => {
         updateSettings({
           llm: value as LLMSelection,
         });
         toast("Successfully changed LLM", {
           icon: llms.find((llm) => llm.value === value)?.icon,
-          description: "LLM changed to " + value,
+          description: "LLM changed to " + value.split(":")[1],
         });
       }}
       open={open}
@@ -96,7 +104,6 @@ export default function LLMSelector() {
             className="rounded-lg px-2 py-0.5"
             value={llm.value}
             key={llm.value}
-            disabled={llm.value === "synth-ui-v1"}
           >
             <div className="flex items-center gap-3 p-1 pr-5">
               {llm.icon}
