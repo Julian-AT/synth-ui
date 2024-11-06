@@ -82,7 +82,9 @@ export default function Sidebar() {
     <AceternitySidebar animate={false}>
       <SidebarBody className="flex h-screen flex-col justify-between p-3 md:items-center">
         <div className="flex w-full flex-col items-center gap-4">
-          <Logo className="aspect-square h-full w-full p-1" />
+          <Link href="/">
+            <Logo className="aspect-square h-full w-full p-1" />
+          </Link>
           <div className="flex w-full flex-col gap-2">
             <SidebarButton
               href="/chat"
