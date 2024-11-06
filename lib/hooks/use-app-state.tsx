@@ -22,7 +22,7 @@ interface AppStateContext {
   chat: Chat | null;
   isGenerating: boolean;
   prompt: string;
-  setChat: (chat: Chat) => void;
+  setChat: (chat: Chat | null) => void;
   setIsGenerating: (isGenerating: boolean) => void;
   setPrompt: (prompt: string) => void; // New setter for prompt
   setSharePath: (sharePath: string | undefined) => void;
@@ -58,7 +58,7 @@ export function AppStateProvider({ children }: AppStateProviderProps) {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
-  const setChat = (chat: Chat) => {
+  const setChat = (chat: Chat | null) => {
     setState({ ...state, chat });
   };
 
