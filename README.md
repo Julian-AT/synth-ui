@@ -4,7 +4,7 @@
 <p>
     Open Source Generative UI with natural language
 </p>
-<p align="center"><a href="https://www.synthui.design/">✨ Homepage</a> | <a href="https://www.synthui.design/chat">🤖 Chat with Synth UI</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-2k-v1">🚀 Synth UI v1 Model</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-2k-v1">🤗 Completion Dataset</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-Instruct-2k-v1">🤗 Instruct Dataset</a></p>
+<p align="center"><a href="https://www.synthui.design/">✨ Homepage</a> | <a href="https://www.synthui.design/chat">🤖 Chat with Synth UI</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-2k-v1">🤗 Completion Dataset</a> | <a href="https://huggingface.co/datasets/JulianAT/SynthUI-Code-Instruct-2k-v1">🤗 Instruct Dataset</a></p>
 </div>
 
 # 🎨 Synth UI - AI-Powered UI Components
@@ -75,8 +75,21 @@ We encourage contributions and feedback from the community to help improve Synth
 # Roadmap
 
 - [x] LLM Support
-  - [x] Anthropic
   - [x] OpenAI
+    - [x] gpt-4o
+    - [x] gpt-4o-mini
+    - [x] gpt-4o-turbo
+  - [x] Anthropic
+    - [x] claude-3-5-sonnet-20241022
+    - [x] claude-3-5-sonnet-20240620
+    - [x] claude-3-5-haiku-20241022
+  - [x] Mistral
+    - [x] mistral-large-latest
+    - [x] mistral-small-latest
+    - [x] pixtral-12b-2409
+  - [x] Gemini
+    - [x] gemini-1.5-flash
+    - [x] gemini-1.5-pro
 - [x] Support for major UI-Libraries
   - [x] shadcn/ui
   - [x] Flowbite
