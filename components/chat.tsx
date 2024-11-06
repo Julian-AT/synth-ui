@@ -14,6 +14,7 @@ import { useAppState } from "@/lib/hooks/use-app-state";
 import { useScrollToBottom } from "@/lib/hooks/use-scroll-to-bottom";
 
 import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
 
 const EmptyScreen = dynamic(() => import("@/components/empty-screen"), {
   ssr: false,
@@ -31,6 +32,7 @@ interface ChatProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Chat({ missingKeys }: ChatProps) {
+  const pathname = usePathname();
   const [aiState] = useAIState<typeof AI>();
   const [messages] = useUIState<typeof AI>();
   const { setChat } = useAppState();
@@ -82,7 +84,7 @@ export function Chat({ missingKeys }: ChatProps) {
       );
     }
 
-    return messages.length ? (
+    return pathname !== "/chat" && messages.length > 0 ? (
       <div className="relative flex h-screen max-h-screen flex-col overflow-hidden">
         <ChatHeader />
         <div
