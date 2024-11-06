@@ -6,9 +6,24 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import dynamic from "next/dynamic";
 
 export const runtime = "edge";
 export const preferredRegion = "home";
+
+// Dynamically import heavy components
+const DynamicAnalytics = dynamic(
+  () => import("@vercel/analytics/react").then((mod) => mod.Analytics),
+  {
+    ssr: false,
+  },
+);
+const DynamicSpeedInsights = dynamic(
+  () => import("@vercel/speed-insights/next").then((mod) => mod.SpeedInsights),
+  {
+    ssr: false,
+  },
+);
 
 const siteConfig = {
   name: "Synth UI",
@@ -97,8 +112,8 @@ export default function RootLayout({
             <Toaster />
           </main>
         </Providers>
-        <Analytics />
-        <SpeedInsights />
+        <DynamicAnalytics />
+        <DynamicSpeedInsights />
       </body>
     </html>
   );

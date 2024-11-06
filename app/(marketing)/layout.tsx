@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
 import "@/styles/globals.css";
 import { NavBar } from "@/components/marketing/navbar";
 import { Footer } from "@/components/marketing/footer";
+import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -10,9 +10,13 @@ export default function RootLayout({
 }>) {
   return (
     <main>
-      <NavBar />
+      <Suspense fallback={<div className="h-16" />}>
+        <NavBar />
+      </Suspense>
       {children}
-      <Footer />
+      <Suspense fallback={<div className="h-64" />}>
+        <Footer />
+      </Suspense>
     </main>
   );
 }
