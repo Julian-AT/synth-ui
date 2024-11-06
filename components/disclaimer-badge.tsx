@@ -10,8 +10,8 @@ import {
 } from "hugeicons-react";
 import { llms } from "@/components/llm-selector";
 import { useCopyToClipboard } from "@/lib/hooks/use-copy-to-clipboard";
-import { Button } from "./ui/button";
-import { ChatShareDialog } from "./chat-share-dialog";
+import { Button } from "@/components/ui/button";
+import { ChatShareDialog } from "@/components/chat-share-dialog";
 
 interface DisclaimerBadgeProps {
   content: string;
