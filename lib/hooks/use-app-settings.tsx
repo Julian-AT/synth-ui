@@ -11,7 +11,7 @@ interface AppSettings {
 }
 
 const defaultSettings: AppSettings = {
-  llm: "claude-3.5-sonnet",
+  llm: "openai:gpt-4o",
   uiLibrary: "shadcn",
 };
 
