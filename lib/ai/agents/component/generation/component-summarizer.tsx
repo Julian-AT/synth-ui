@@ -1,12 +1,13 @@
 import { createStreamableUI } from "ai/rsc";
 import { streamingAgent, StreamResponse } from "@/lib/ai/agents/streamingAgent";
-import { UILibrary } from "@/lib/types";
+import { LLMSelection, UILibrary } from "@/lib/types";
 
 export async function componentSummarizer(
   uiStream: ReturnType<typeof createStreamableUI>,
   code: string,
   uiLibrary: UILibrary,
   language: string,
+  llm: LLMSelection,
   update?: boolean,
 ): Promise<StreamResponse> {
   const SYSTEM_PROMPT = `As the expert React component designer who created this component, provide a comprehensive code review and integration guide. Your response should:
@@ -33,5 +34,6 @@ Please respond in ${language}.`;
     ],
     SYSTEM_PROMPT,
     update,
+    llm,
   );
 }

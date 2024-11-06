@@ -1,7 +1,7 @@
 import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { streamObject, streamText } from "ai";
 import { StreamResponse } from "@/lib/ai/agents/streamingAgent";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 import PromptSuggestions from "@/components/prompt-suggestions";
 import { LLMSelection } from "@/lib/types";
 import { z } from "zod";

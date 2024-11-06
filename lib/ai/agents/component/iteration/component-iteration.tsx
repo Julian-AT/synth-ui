@@ -6,7 +6,7 @@ import ComponentCard from "@/components/component-card";
 import { ReactIcon } from "hugeicons-react";
 import { camelCaseToSpaces } from "@/lib/utils";
 import { streamText } from "ai";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 
 export async function componentIterator(
   uiStream: ReturnType<typeof createStreamableUI>,

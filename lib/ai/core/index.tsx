@@ -22,13 +22,14 @@ import { workflow } from "@/lib/ai/core/workflow";
 import { generateTitle } from "@/lib/ai/agents/title-generator";
 import PromptSuggestions from "@/components/prompt-suggestions";
 import DisclaimerBadge from "@/components/disclaimer-badge";
+import { isProviderEnabled } from "@/lib/utils/registry";
 
 const MAX_MESSAGES = 6;
 
 async function submitUserMessage(
   formData?: FormData,
   uiLibrary: UILibrary = "shadcn",
-  llm: LLMSelection = "gpt-4o",
+  llm: LLMSelection = "openai:gpt-4o",
 ) {
   "use server";
 
@@ -56,6 +57,14 @@ async function submitUserMessage(
   messages.splice(0, Math.max(messages.length - MAX_MESSAGES, 0));
 
   const content = formData?.get("input") as string;
+  const providerId = llm.split(":")[0];
+  console.log(`Using model: ${llm}`);
+
+  if (!isProviderEnabled(providerId)) {
+    throw new Error(
+      `Provider ${providerId} is not available. (API key not configured)`,
+    );
+  }
 
   if (content) {
     aiState.update({
@@ -219,10 +228,28 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                 display: <PlainMessage content={answer.value} indent />,
               };
             case "end":
-              const result = JSON.parse(content);
+              const raw_result = JSON.parse(content);
+              const result = raw_result.result;
+              const relatedMessages = aiState.messages.filter(
+                (m) => m.id === id,
+              );
+              let mergedContent = "";
+
+              relatedMessages.forEach((m) => {
+                if (m.role === "user") return;
+                if (m.type === "component_card") {
+                  const raw = JSON.parse(m.content);
+                  mergedContent += `\n\n${raw.result.code}`;
+                } else if (m.role === "assistant" && m.type !== "end") {
+                  mergedContent += `\n\n${m.content}`;
+                }
+              });
+
               return {
                 id,
-                display: <DisclaimerBadge {...result} />,
+                display: (
+                  <DisclaimerBadge content={mergedContent} llm={result.llm} />
+                ),
               };
           }
         case "tool":
@@ -252,7 +279,13 @@ export const getUIStateFromAIState = (aiState: AIState): UIState => {
                 };
               case "prompt_suggestions":
                 // only display prompt suggestions if its the last message
-                if (index !== messages.length - 1) return null;
+                if (
+                  index !== messages.length - 1 ||
+                  (aiState.sharePath &&
+                    aiState.path.split("/")[2] ===
+                      aiState.sharePath.split("/")[2])
+                )
+                  return null;
 
                 const title = toolOutput.result.suggestionsTitle;
                 const prompts = toolOutput.result.suggestions;

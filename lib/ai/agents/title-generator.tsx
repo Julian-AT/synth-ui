@@ -1,5 +1,5 @@
 import { streamText } from "ai";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 
 const SYSTEM_PROMPT = `As an AI specializing in generating catchy and relevant titles for React UI components and design patterns, your task is to create a fitting, good-sounding title based on the given query or conversation context.
 

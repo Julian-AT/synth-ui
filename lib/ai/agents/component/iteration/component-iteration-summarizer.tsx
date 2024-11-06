@@ -1,6 +1,6 @@
 import { createStreamableUI } from "ai/rsc";
 import { streamingAgent, StreamResponse } from "@/lib/ai/agents/streamingAgent";
-import { UILibrary } from "@/lib/types";
+import { LLMSelection, UILibrary } from "@/lib/types";
 
 export async function componentIterationSummarizer(
   uiStream: ReturnType<typeof createStreamableUI>,
@@ -8,6 +8,7 @@ export async function componentIterationSummarizer(
   updatedCode: string,
   uiLibrary: UILibrary,
   language: string,
+  llm: LLMSelection,
   update?: boolean,
 ): Promise<StreamResponse> {
   const SYSTEM_PROMPT = `As an expert React component designer, analyze the changes made to a component and provide a comprehensive summary. Your response should:
@@ -41,5 +42,6 @@ Provide a detailed explanation of all modifications, their implementation, and t
     ],
     SYSTEM_PROMPT,
     update,
+    llm,
   );
 }

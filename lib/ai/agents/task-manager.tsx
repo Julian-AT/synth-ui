@@ -1,6 +1,6 @@
 import { CoreMessage, generateObject } from "ai";
 import { nextActionSchema } from "@/lib/schema/next-action";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 
 export async function taskManager(messages: CoreMessage[], language: string) {
   try {

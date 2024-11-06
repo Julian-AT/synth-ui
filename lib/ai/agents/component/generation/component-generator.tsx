@@ -3,7 +3,7 @@ import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { StreamResponse } from "@/lib/ai/agents/streamingAgent";
 import { streamText } from "ai";
 import { camelCaseToSpaces } from "@/lib/utils";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 import ComponentCard from "@/components/component-card";
 import { ReactIcon } from "hugeicons-react";
 import { LLMSelection } from "@/lib/types";

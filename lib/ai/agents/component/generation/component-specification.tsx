@@ -3,10 +3,10 @@ import {
   PartialComponentSpecificationSchema,
   getComponentSpecificationSchema,
 } from "@/lib/schema/component/specification";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 import { CoreMessage, streamObject } from "ai";
 import { createStreamableValue } from "ai/rsc";
-import { UILibrary } from "@/lib/types";
+import { LLMSelection, UILibrary } from "@/lib/types";
 import { getUILibraryComponents } from "@/lib/utils/getUILibraryComponents";
 
 // disabled for prod -> only local testing for logging specification
@@ -16,6 +16,7 @@ export async function componentSpecification(
   messages: CoreMessage[],
   uiLibrary: UILibrary,
   language: string,
+  llm: LLMSelection,
 ): Promise<ComponentSpecificationSchema> {
   const objectStream =
     createStreamableValue<PartialComponentSpecificationSchema>();
@@ -26,7 +27,7 @@ export async function componentSpecification(
 
   try {
     await streamObject({
-      model: getModel(),
+      model: getModel(llm),
       system: `As an expert NextJS/React engineer, your task is to generate a highly detailed JSON schema for a new component. This schema will be used to create a production-ready component in a subsequent step. Your primary objectives are:
 
 1. Create an exhaustive and detailed specification, leaving no aspect of the component undefined.

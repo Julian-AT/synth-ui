@@ -60,7 +60,7 @@ export async function workflow(
     languageObject = (await languageIdentifier(query)) ?? languageObject;
     const language = languageObject.object.language;
 
-    console.log(language);
+    console.log(`Using Language for response: ${language}`);
 
     let action: {
       object: {
@@ -71,7 +71,7 @@ export async function workflow(
     if (!skip) action = (await taskManager(messages, language)) ?? action;
 
     if (action.object.next === "inquire") {
-      const inquiry = await inquire(uiStream, messages, language);
+      const inquiry = await inquire(uiStream, messages, language, llm);
 
       if (inquiry.hasError) {
         throw new Error("An error occured while generating the inquiry");
@@ -123,6 +123,7 @@ export async function workflow(
         messages,
         uiLibrary,
         language,
+        llm,
         true,
       );
 
@@ -132,6 +133,7 @@ export async function workflow(
         messages,
         uiLibrary,
         language,
+        llm,
       );
 
       const fileName = specification.fileName;
@@ -158,6 +160,7 @@ export async function workflow(
         component.response,
         uiLibrary,
         language,
+        llm,
       );
 
       const disclaimerContent = `${abstract.response}\n\n${component.response}\n\n${summary.response}`;
@@ -219,6 +222,7 @@ export async function workflow(
         uiStream,
         messages,
         language,
+        llm,
         true,
       );
 
@@ -268,6 +272,7 @@ export async function workflow(
         componentIteration.response,
         uiLibrary,
         language,
+        llm,
         true,
       );
 
@@ -310,7 +315,7 @@ export async function workflow(
             id,
             role: "assistant",
             content: JSON.stringify({
-              result: { content: iterationDisclaimerContent, llm },
+              result: { llm },
             }),
             type: "end",
           },

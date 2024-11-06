@@ -1,6 +1,6 @@
 import { CoreMessage, generateObject } from "ai";
 import { LanguageSchema } from "@/lib/schema/language";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 
 export async function languageIdentifier(prompt: string) {
   try {

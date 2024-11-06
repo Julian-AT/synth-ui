@@ -1,7 +1,8 @@
 import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { CoreMessage, streamText } from "ai";
-import { getModel } from "@/lib/utils/getModel";
+import { getModel } from "@/lib/utils/registry";
 import { BotMessage, PlainMessage } from "@/components/chat-message";
+import { LLMSelection } from "@/lib/types";
 
 export interface StreamResponse {
   response: string;
@@ -13,6 +14,7 @@ export async function streamingAgent(
   messages: CoreMessage[],
   systemPrompt: string,
   update: boolean = false,
+  llm: LLMSelection,
 ): Promise<StreamResponse> {
   let fullResponse = "";
   let hasError = false;
@@ -34,7 +36,7 @@ export async function streamingAgent(
 
   try {
     await streamText({
-      model: getModel(),
+      model: getModel(llm),
       messages,
       system: systemPrompt,
       onFinish: (event) => {
