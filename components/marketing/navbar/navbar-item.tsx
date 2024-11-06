@@ -1,9 +1,6 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { Link } from "next-view-transitions";
 import { ReactNode } from "react";
-import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 
 type Props = {
@@ -21,7 +18,20 @@ export function NavBarItem({
   target,
   className,
 }: Props) {
-  const pathname = usePathname();
+  if (href.startsWith("#")) {
+    return (
+      <a
+        href={href}
+        className={cn(
+          buttonVariants({ variant: "link" }),
+          "text-sm font-normal text-muted-foreground",
+          className,
+        )}
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
     <Link
