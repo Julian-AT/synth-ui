@@ -20,6 +20,8 @@ import NotImplementedDialog from "@/components/not-implemented-dialog";
 import { useAppState } from "@/lib/hooks/use-app-state";
 import { useComponentPreview } from "@/lib/hooks/use-component-preview";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
+import { toast } from "sonner";
+import ErrorCard from "@/components/error-card";
 
 interface PromptFormProps extends React.HTMLAttributes<HTMLDivElement> {
   query?: string;
@@ -48,28 +50,43 @@ export default function PromptForm({ query, className }: PromptFormProps) {
   }, [isPreviewOpen]);
 
   const handleQuerySubmit = async (query: string, formData?: FormData) => {
-    if (!query?.trim() || isGenerating) return;
+    try {
+      if (!query?.trim() || isGenerating) return;
 
-    setInput("");
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: generateId(),
-        display: <UserMessage>{query}</UserMessage>,
-      },
-    ]);
+      setInput("");
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: generateId(),
+          display: <UserMessage>{query}</UserMessage>,
+        },
+      ]);
 
-    const data = formData || new FormData();
-    if (!formData) {
-      data.append("input", query);
+      const data = formData || new FormData();
+      if (!formData) {
+        data.append("input", query);
+      }
+      setPrompt(query);
+      const responseMessage = await submitUserMessage(
+        data,
+        settings.uiLibrary,
+        settings.llm,
+      );
+      setMessages((currentMessages) => [...currentMessages, responseMessage]);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occured.";
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: generateId(),
+          display: <ErrorCard message={errorMessage} />,
+        },
+      ]);
+      toast.error("Error submitting prompt", {
+        description: errorMessage,
+      });
     }
-    setPrompt(query);
-    const responseMessage = await submitUserMessage(
-      data,
-      settings.uiLibrary,
-      settings.llm,
-    );
-    setMessages((currentMessages) => [...currentMessages, responseMessage]);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

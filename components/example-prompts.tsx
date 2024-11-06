@@ -9,6 +9,8 @@ import { generateId } from "ai";
 import { UserMessage } from "@/components/chat-message";
 import { cn } from "@/lib/utils";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
+import { toast } from "sonner";
+import ErrorCard from "@/components/error-card";
 
 export const EXAMPLE_PROMPTS: ExamplePrompt[] = [
   {
@@ -42,27 +44,44 @@ export default function ExamplePrompts({ className }: ExamplePromptsProps) {
           variant={"outline"}
           className="rounded-xl py-0"
           onClick={async () => {
-            const query = p.prompt;
+            try {
+              const query = p.prompt;
 
-            setMessages((currentMessages) => [
-              ...currentMessages,
-              {
-                id: generateId(),
-                display: <UserMessage>{query}</UserMessage>,
-              },
-            ]);
+              setMessages((currentMessages) => [
+                ...currentMessages,
+                {
+                  id: generateId(),
+                  display: <UserMessage>{query}</UserMessage>,
+                },
+              ]);
 
-            const data = new FormData();
-            data.append("input", p.prompt);
-            const responseMessage = await submitUserMessage(
-              data,
-              settings.uiLibrary,
-              settings.llm,
-            );
-            setMessages((currentMessages) => [
-              ...currentMessages,
-              responseMessage,
-            ]);
+              const data = new FormData();
+              data.append("input", p.prompt);
+              const responseMessage = await submitUserMessage(
+                data,
+                settings.uiLibrary,
+                settings.llm,
+              );
+              setMessages((currentMessages) => [
+                ...currentMessages,
+                responseMessage,
+              ]);
+            } catch (error) {
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : "An unknown error occured.";
+              setMessages((currentMessages) => [
+                ...currentMessages,
+                {
+                  id: generateId(),
+                  display: <ErrorCard message={errorMessage} />,
+                },
+              ]);
+              toast.error("Error submitting prompt", {
+                description: errorMessage,
+              });
+            }
           }}
         >
           <p className="text-sm">{p.label}</p>

@@ -8,6 +8,8 @@ import { generateId } from "ai";
 import { UserMessage } from "@/components/chat-message";
 import { useAppSettings } from "@/lib/hooks/use-app-settings";
 import { useState } from "react";
+import { toast } from "sonner";
+import ErrorCard from "@/components/error-card";
 
 interface PromptSuggestionsProps {
   prompts: string[];
@@ -27,24 +29,39 @@ export default function PromptSuggestions({
   if (hasSubmittedPrompt) return null;
 
   const handlePromptClick = async (prompt: string) => {
-    setHasSubmittedPrompt(true);
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      {
-        id: generateId(),
-        display: <UserMessage>{prompt}</UserMessage>,
-      },
-    ]);
+    try {
+      setHasSubmittedPrompt(true);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: generateId(),
+          display: <UserMessage>{prompt}</UserMessage>,
+        },
+      ]);
 
-    const data = new FormData();
-    data.append("input", prompt);
-    const responseMessage = await submitUserMessage(
-      data,
-      settings.uiLibrary,
-      settings.llm,
-    );
+      const data = new FormData();
+      data.append("input", prompt);
+      const responseMessage = await submitUserMessage(
+        data,
+        settings.uiLibrary,
+        settings.llm,
+      );
 
-    setMessages((currentMessages) => [...currentMessages, responseMessage]);
+      setMessages((currentMessages) => [...currentMessages, responseMessage]);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occured.";
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        {
+          id: generateId(),
+          display: <ErrorCard message={errorMessage} />,
+        },
+      ]);
+      toast.error("Error submitting prompt", {
+        description: errorMessage,
+      });
+    }
   };
 
   return (
