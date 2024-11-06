@@ -35,10 +35,17 @@ export type ExamplePrompt = {
 };
 
 export type LLMSelection =
-  | "claude-3.5-sonnet"
-  | "gpt-4o"
-  | "gpt-4o-mini"
-  | "synth-ui-v1";
+  | "openai:gpt-4o"
+  | "openai:gpt-4o-mini"
+  | "openai:gpt-4o-turbo"
+  | "anthropic:claude-3-5-sonnet-20241022"
+  | "anthropic:claude-3-5-sonnet-20240620"
+  | "anthropic:claude-3-5-haiku-20241022"
+  | "mistral:mistral-large-latest"
+  | "mistral:mistral-small-latest"
+  | "mistral:pixtral-12b-2409"
+  | "google:gemini-1.5-flash"
+  | "google:gemini-1.5-pro";
 
 export type UserRole = "user" | "admin" | "contributor" | "demo";
 
