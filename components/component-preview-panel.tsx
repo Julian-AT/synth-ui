@@ -33,8 +33,7 @@ export default function ComponentPreviewPanel() {
     setIsMounted(true);
   }, []);
 
-  if (!chat || !isPreviewOpen || !isMounted || pathname === "/chat/history")
-    return null;
+  if (!isPreviewOpen || !isMounted || pathname === "/chat/history") return null;
 
   return width >= 1280 ? (
     <>
