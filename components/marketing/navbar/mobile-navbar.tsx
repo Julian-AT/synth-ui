@@ -44,8 +44,8 @@ export const MobileNavbar = ({ navItems }: any) => {
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-50 flex flex-col items-start justify-start space-y-10 bg-white pt-5 text-xl text-zinc-600 transition duration-200 hover:text-zinc-800 dark:bg-black"
         >
-          <div className="flex w-full items-center justify-between">
-            <Logo />
+          <div className="flex w-full items-center justify-between px-8">
+            <Logo className="h-8 w-8" />
             <div className="flex items-center space-x-2">
               <ModeToggle />
               <Cancel01Icon
